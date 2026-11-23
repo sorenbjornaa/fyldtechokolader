@@ -1,0 +1,39 @@
+.DS_Store
+.idea/
+.vscode/*.local.json
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+auth.json
+*.pem
+*.key
+
+# JavaScript / Next.js
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# PHP / Composer
+vendor/
+composer.lock.local
+.phpunit.result.cache
+
+# Build artifacts
+dist/
+build/
+*.zip
+
+# WordPress runtime content
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+debug.log
+
