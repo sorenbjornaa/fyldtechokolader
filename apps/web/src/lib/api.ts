@@ -4,7 +4,7 @@ import type { Chocolate } from "@/types/chocolate";
 const defaultApiUrl =
   "https://cms.fyldtechokolader.dk/wp-json/fyldtechokolader/v1";
 
-function apiUrl(path: string): string {
+export function apiUrl(path: string): string {
   const baseUrl = (process.env.WORDPRESS_API_URL ?? defaultApiUrl).replace(
     /\/$/,
     "",

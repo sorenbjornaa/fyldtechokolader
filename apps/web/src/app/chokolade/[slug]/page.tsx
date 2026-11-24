@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ChocolateCard } from "@/components/chocolate-card";
-import { RatingDisplay } from "@/components/rating-display";
+import { RatingForm } from "@/components/rating-form";
 import { SiteHeader } from "@/components/site-header";
 import { getChocolate, getChocolates } from "@/lib/api";
 
@@ -150,9 +150,11 @@ async function ChocolatePageContent({ params }: ChocolatePageProps) {
             {chocolate.description && chocolate.description !== chocolate.title ? (
               <p className="detail__description">{chocolate.description}</p>
             ) : null}
-            <RatingDisplay
-              average={chocolate.rating.average}
-              count={chocolate.rating.count}
+            <RatingForm
+              initialAverage={chocolate.rating.average}
+              initialCount={chocolate.rating.count}
+              slug={chocolate.slug}
+              title={chocolate.title}
             />
 
             <dl className="detail__facts">
