@@ -51,5 +51,7 @@
 
 **Verificeret 24.11.2026:** Version `0.1.1` er aktiv på CMS'et. Liste- og detalje-endpoints, ratingoversigt, søgning samt årsfilter virker, og API'et returnerer alle 28 chokolader. En uafhængig skrivebeskyttet SQL-dry-run mod Elementor-tabellerne fandt 259 indsendelser, 250 gyldige scores, præcis 206 sikre ratings fordelt på alle 28 chokolader samt 44 gyldige scores uden chokolade-ID. Den nye ratingtabel indeholder 0 rækker; ingen ratings er importeret endnu. API'et returnerer fortsat HTML-entiteter i visse titler, og skaltypeværdierne er endnu legacy-data, indtil indholdsmigreringen udføres.
 
+**Version 0.1.2 bygget 24.11.2026:** API-tekst normaliseres, så HTML-entiteter ikke sendes til Next.js. Adminsiden er udvidet med en nonce- og rettighedsbeskyttet dry-run/import samt rapport pr. chokolade. Skrivning kræver frisk backup-bekræftelse og kontrolteksten `IMPORTER 206`; importen genkontrollerer kandidaterne og kører i en databasetransaktion. Installationen udfører ikke import automatisk. Domænetests, PHP-syntaks og WordPress Coding Standards består.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 

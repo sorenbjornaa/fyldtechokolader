@@ -4,7 +4,7 @@ Projektspecifikt WordPress-plugin til datamodel, individuelle ratings, kontrolle
 
 ## Status
 
-Version `0.1.1` retter WordPress REST API's håndtering af tomme slugfiltre efter den første integrationstest på CMS'et.
+Version `0.1.2` normaliserer HTML-entiteter i API-tekst og tilføjer en kontrolleret administrationsside til legacy-importen.
 
 Pluginet indeholder:
 
@@ -13,7 +13,7 @@ Pluginet indeholder:
 - Databasetabellen `{prefix}fyld_ratings` med én aktiv rating pr. anonym browser og chokolade.
 - Gennemsnit, antal og fordeling på skalaen 1–7.
 - Offentlige læse-endpoints og et HMAC-beskyttet skrive-endpoint.
-- Skrivebeskyttet ratingoversigt under **Værktøjer → Chokoladeratings**.
+- Ratingoversigt og kontrolleret legacy-import under **Værktøjer → Chokoladeratings**.
 - WP-CLI-import af historiske Elementor-ratings med obligatorisk dry-run som standard.
 
 Pluginet sletter ikke data ved deaktivering eller afinstallation.
@@ -53,6 +53,19 @@ define( 'FYLDTECHOKOLADER_API_SECRET', 'en-tilfaeldig-hemmelighed-paa-mindst-32-
 Samme hemmelighed gemmes som en krypteret environment variable i Vercel. Den sendes aldrig til browseren.
 
 ## Legacy-import
+
+### WordPress-administration
+
+Under **Værktøjer → Chokoladeratings** kan en administrator:
+
+1. Køre en dry-run, som ikke ændrer data.
+2. Kontrollere, at resultatet viser præcis 206 sikre ratings.
+3. Bekræfte en frisk backup og skrive `IMPORTER 206`.
+4. Starte den idempotente import.
+
+Importen analyserer dataene igen umiddelbart før skrivning, afbrydes ved andet end 206 sikre ratings og bruger en databasetransaktion, så en fejl ikke efterlader en delvis import.
+
+### WP-CLI
 
 Dry-run ændrer ingen data:
 

@@ -8,8 +8,10 @@
 namespace Fyldtechokolader\Core\Migration;
 
 use Fyldtechokolader\Core\Content\ContentRegistrar;
+use Fyldtechokolader\Core\Content\TextNormalizer;
 use Fyldtechokolader\Core\Ratings\RatingRepository;
 use RuntimeException;
+use Throwable;
 use wpdb;
 
 defined( 'ABSPATH' ) || exit;
@@ -94,11 +96,13 @@ final class LegacyRatingImporter {
 			$chocolate_id = (int) $parsed['chocolate_id'];
 			if ( ! isset( $report['by_chocolate'][ $chocolate_id ] ) ) {
 				$report['by_chocolate'][ $chocolate_id ] = array(
-					'title' => get_the_title( $chocolate_id ),
-					'count' => 0,
+					'title'       => TextNormalizer::plain( get_the_title( $chocolate_id ) ),
+					'count'       => 0,
+					'score_total' => 0,
 				);
 			}
 			++$report['by_chocolate'][ $chocolate_id ]['count'];
+			$report['by_chocolate'][ $chocolate_id ]['score_total'] += (int) $parsed['score'];
 
 			$candidates[] = array(
 				'submission_id' => (int) $submission_id,
@@ -108,6 +112,11 @@ final class LegacyRatingImporter {
 		}
 
 		$report['matches_expectation'] = self::EXPECTED_SAFE_RATINGS === $report['safe_candidates'];
+		foreach ( $report['by_chocolate'] as &$chocolate_report ) {
+			$chocolate_report['average'] = round( $chocolate_report['score_total'] / $chocolate_report['count'], 2 );
+			unset( $chocolate_report['score_total'] );
+		}
+		unset( $chocolate_report );
 		ksort( $report['by_chocolate'], SORT_NUMERIC );
 
 		if ( $commit && ! $report['matches_expectation'] ) {
@@ -115,20 +124,33 @@ final class LegacyRatingImporter {
 		}
 
 		if ( $commit ) {
-			foreach ( $candidates as $candidate ) {
-				$voter_hash = hash_hmac( 'sha256', 'legacy:' . $candidate['submission_id'], wp_salt( 'auth' ) );
-				$status     = $this->ratings->insert_legacy(
-					$candidate['submission_id'],
-					$candidate['chocolate_id'],
-					$voter_hash,
-					$candidate['score']
-				);
+			if ( false === $this->database->query( 'START TRANSACTION' ) ) {
+				throw new RuntimeException( 'Databasetransaktionen kunne ikke startes.' );
+			}
 
-				if ( 'inserted' === $status ) {
-					++$report['inserted'];
-				} else {
-					++$report['already_imported'];
+			try {
+				foreach ( $candidates as $candidate ) {
+					$voter_hash = hash_hmac( 'sha256', 'legacy:' . $candidate['submission_id'], wp_salt( 'auth' ) );
+					$status     = $this->ratings->insert_legacy(
+						$candidate['submission_id'],
+						$candidate['chocolate_id'],
+						$voter_hash,
+						$candidate['score']
+					);
+
+					if ( 'inserted' === $status ) {
+						++$report['inserted'];
+					} else {
+						++$report['already_imported'];
+					}
 				}
+
+				if ( false === $this->database->query( 'COMMIT' ) ) {
+					throw new RuntimeException( 'Databasetransaktionen kunne ikke afsluttes.' );
+				}
+			} catch ( Throwable $exception ) {
+				$this->database->query( 'ROLLBACK' );
+				throw new RuntimeException( 'Importen blev rullet tilbage uden delvise ændringer.', 0, $exception );
 			}
 		}
 

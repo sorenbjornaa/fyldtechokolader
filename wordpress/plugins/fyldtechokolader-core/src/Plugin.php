@@ -29,6 +29,7 @@ final class Plugin {
 		$rating_repository = new RatingRepository( $wpdb );
 		$rating_service    = new RatingService( $rating_repository );
 		$chocolates        = new ChocolateRepository( $rating_repository );
+		$legacy_importer   = new LegacyRatingImporter( $wpdb, $rating_repository );
 
 		add_action( 'init', array( $content_registrar, 'register' ), 20 );
 		add_action(
@@ -47,13 +48,14 @@ final class Plugin {
 		);
 
 		if ( is_admin() ) {
-			$ratings_page = new RatingsPage( $rating_repository );
+			$ratings_page = new RatingsPage( $rating_repository, $legacy_importer );
 			add_action( 'admin_menu', array( $ratings_page, 'register' ) );
+			add_action( 'admin_post_fyldtechokolader_legacy_dry_run', array( $ratings_page, 'handle_dry_run' ) );
+			add_action( 'admin_post_fyldtechokolader_legacy_import', array( $ratings_page, 'handle_import' ) );
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			$importer = new LegacyRatingImporter( $wpdb, $rating_repository );
-			\WP_CLI::add_command( 'fyldtechokolader ratings', new RatingsCommand( $importer ) );
+			\WP_CLI::add_command( 'fyldtechokolader ratings', new RatingsCommand( $legacy_importer ) );
 		}
 	}
 }

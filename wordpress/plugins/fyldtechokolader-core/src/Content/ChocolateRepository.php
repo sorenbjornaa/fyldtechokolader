@@ -117,8 +117,8 @@ final class ChocolateRepository {
 		return array(
 			'id'             => $post->ID,
 			'slug'           => $post->post_name,
-			'title'          => get_the_title( $post ),
-			'description'    => $description,
+			'title'          => TextNormalizer::plain( get_the_title( $post ) ),
+			'description'    => TextNormalizer::plain( $description ),
 			'productionYear' => $year,
 			'productionDate' => $date,
 			'shellType'      => $shell_type,
@@ -127,7 +127,7 @@ final class ChocolateRepository {
 			'image'          => $image ? array(
 				'id'     => $image_id,
 				'src'    => $image[0],
-				'alt'    => (string) get_post_meta( $image_id, '_wp_attachment_image_alt', true ),
+				'alt'    => TextNormalizer::plain( (string) get_post_meta( $image_id, '_wp_attachment_image_alt', true ) ),
 				'width'  => (int) $image[1],
 				'height' => (int) $image[2],
 			) : null,
@@ -158,7 +158,7 @@ final class ChocolateRepository {
 		return array_map(
 			static fn ( $term ): array => array(
 				'slug'  => $term->slug,
-				'name'  => $term->name,
+				'name'  => TextNormalizer::plain( $term->name ),
 				'count' => (int) $term->count,
 			),
 			$terms
@@ -241,7 +241,7 @@ final class ChocolateRepository {
 		if ( is_array( $terms ) && $terms ) {
 			return array(
 				'slug' => $terms[0]->slug,
-				'name' => $terms[0]->name,
+				'name' => TextNormalizer::plain( $terms[0]->name ),
 			);
 		}
 
@@ -252,7 +252,7 @@ final class ChocolateRepository {
 
 		return array(
 			'slug' => sanitize_title( $legacy ),
-			'name' => $legacy,
+			'name' => TextNormalizer::plain( $legacy ),
 		);
 	}
 
@@ -265,8 +265,8 @@ final class ChocolateRepository {
 		$image       = (string) get_post_meta( $post->ID, '_yoast_wpseo_opengraph-image', true );
 
 		return array(
-			'title'       => '' !== $title ? $title : get_the_title( $post ),
-			'description' => '' !== $description ? $description : wp_strip_all_tags( $post->post_excerpt ),
+			'title'       => TextNormalizer::plain( '' !== $title ? $title : get_the_title( $post ) ),
+			'description' => TextNormalizer::plain( '' !== $description ? $description : $post->post_excerpt ),
 			'image'       => '' !== $image ? $image : $fallback_image,
 		);
 	}

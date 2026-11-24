@@ -8,12 +8,14 @@ declare(strict_types=1);
 use Fyldtechokolader\Core\Migration\LegacySubmissionParser;
 use Fyldtechokolader\Core\Ratings\Score;
 use Fyldtechokolader\Core\Rest\ChocolateController;
+use Fyldtechokolader\Core\Content\TextNormalizer;
 
 $root = dirname( __DIR__ );
 define( 'ABSPATH', $root . '/' );
 require_once $root . '/src/Ratings/Score.php';
 require_once $root . '/src/Migration/LegacySubmissionParser.php';
 require_once $root . '/src/Rest/ChocolateController.php';
+require_once $root . '/src/Content/TextNormalizer.php';
 
 $sanitize_title_argument_count = null;
 
@@ -92,6 +94,9 @@ $arguments  = $method->invoke( $controller );
 $slug       = $arguments['skaltype']['sanitize_callback']( '', new stdClass(), 'skaltype' );
 $assert_same( '', $slug, 'Tomt skaltypefilter kan saniteres' );
 $assert_same( 1, $sanitize_title_argument_count, 'WordPress-requesten sendes ikke som fallback til sanitize_title' );
+$assert_same( 'Safran & Kardemomme', TextNormalizer::plain( 'Safran &amp; Kardemomme' ), 'HTML-entiteter normaliseres' );
+$assert_same( 'Karamel – citron', TextNormalizer::plain( '<strong>Karamel</strong> &#8211; citron' ), 'HTML-tags fjernes fra API-tekst' );
+$assert_same( 'Miso', TextNormalizer::plain( '&lt;em&gt;Miso&lt;/em&gt;' ), 'Kodede HTML-tags fjernes fra API-tekst' );
 
 if ( $failures ) {
 	fwrite( STDERR, implode( PHP_EOL, $failures ) . PHP_EOL );
