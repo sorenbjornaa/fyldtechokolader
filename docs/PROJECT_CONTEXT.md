@@ -57,5 +57,7 @@
 
 **Administrativ dry-run godkendt 24.11.2026:** Pluginets egen dry-run viser 259 indsendelser, 250 gyldige scores, præcis 206 sikre kandidater og 44 gyldige scores uden chokolade-ID. Rapporten indeholder alle 28 chokolader, og summen af deres ratingantal er 206. Resultatet matcher både den tekniske audit og den uafhængige SQL-kontrol. Ingen data er skrevet; faktisk import afventer en ny backupbekræftelse.
 
+**Backup bekræftet 24.11.2026:** Søren har lavet en ny backup efter installation og godkendt dry-run. Forudsætningen for at starte den kontrollerede import af de 206 ratings er dermed opfyldt.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
