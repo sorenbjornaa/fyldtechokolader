@@ -53,5 +53,7 @@
 
 **Version 0.1.2 bygget 24.11.2026:** API-tekst normaliseres, så HTML-entiteter ikke sendes til Next.js. Adminsiden er udvidet med en nonce- og rettighedsbeskyttet dry-run/import samt rapport pr. chokolade. Skrivning kræver frisk backup-bekræftelse og kontrolteksten `IMPORTER 206`; importen genkontrollerer kandidaterne og kører i en databasetransaktion. Installationen udfører ikke import automatisk. Domænetests, PHP-syntaks og WordPress Coding Standards består.
 
+**Version 0.1.2 verificeret på CMS 24.11.2026:** Pluginet er aktivt. API'et returnerer fortsat alle 28 chokolader, og titler, beskrivelser og SEO-titler returneres nu som ren tekst uden HTML-entiteter. Ratingtabellen indeholder fortsat 0 rækker, så installationen har ikke startet importen. Næste trin er at køre den skrivebeskyttede dry-run under Værktøjer → Chokoladeratings.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
