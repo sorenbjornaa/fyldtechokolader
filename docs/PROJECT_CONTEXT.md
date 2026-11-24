@@ -79,5 +79,7 @@
 
 **Version 0.1.4 verificeret og signeringsflow testet 24.11.2026:** Pluginet er installeret, aktivt og rapporterer version `0.1.4`. En usigneret kontrolrequest direkte til WordPress afvises med HTTP 401, mens den tilsvarende request gennem Vercels Next.js-route bliver HMAC-signeret, godkendt af WordPress og når frem til den forventede 404 for en ikke-eksisterende test-slug. Dermed er den fælles hemmelighed og hele server-til-server-flowet verificeret uden at oprette en rating. Ratingtabellen indeholder fortsat præcis 206 rækker. Live-UI'en åbner slideren, reagerer på tastaturinput og kan annulleres uden konsolfejl. En virkelig rating afventer et subjektivt valg af chokolade og score.
 
+**Første live-rating gennemført 24.11.2026:** Søren valgte `Citron lakrids` (`citron-lakrids-2`) og scoren 5/7. Ratingen blev indsendt gennem den deployede slider, gemt af det signerede WordPress-endpoint og bekræftet af både UI og API. Chokoladen gik fra 3 ratings med gennemsnit 7,0 til 4 ratings med gennemsnit 6,5; fordelingen er tre 7-taller og ét 5-tal. Den samlede ratingtabel steg fra 206 til 207 rækker. Browseren viste succesbeskeden uden konsolfejl.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
