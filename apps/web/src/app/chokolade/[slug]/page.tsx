@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { ChocolateCard } from "@/components/chocolate-card";
 import { RatingDisplay } from "@/components/rating-display";
 import { SiteHeader } from "@/components/site-header";
@@ -54,7 +55,28 @@ function formatDate(date: string | null): string | null {
   }).format(new Date(`${date}T12:00:00Z`));
 }
 
-export default async function ChocolatePage({ params }: ChocolatePageProps) {
+export default function ChocolatePage({ params }: ChocolatePageProps) {
+  return (
+    <Suspense fallback={<DetailFallback />}>
+      <ChocolatePageContent params={params} />
+    </Suspense>
+  );
+}
+
+function DetailFallback() {
+  return (
+    <main className="loading-page" aria-label="Henter chokoladen">
+      <div className="loading-page__hero" />
+      <div className="loading-page__lines page-shell">
+        <span />
+        <span />
+        <span />
+      </div>
+    </main>
+  );
+}
+
+async function ChocolatePageContent({ params }: ChocolatePageProps) {
   const { slug } = await params;
   const [chocolate, chocolates] = await Promise.all([
     getChocolate(slug),
@@ -72,6 +94,9 @@ export default async function ChocolatePage({ params }: ChocolatePageProps) {
         item.shellType?.slug === chocolate.shellType?.slug,
     )
     .slice(0, 3);
+  const hasRecipe = chocolate.recipeHtml
+    .replace(/<[^>]+>/g, "")
+    .trim().length > 0;
 
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
@@ -149,7 +174,7 @@ export default async function ChocolatePage({ params }: ChocolatePageProps) {
           </div>
         </article>
 
-        {chocolate.recipeHtml ? (
+        {hasRecipe ? (
           <section className="recipe page-shell" aria-labelledby="recipe-title">
             <div className="recipe__heading">
               <p className="eyebrow">Fra køkkenet</p>

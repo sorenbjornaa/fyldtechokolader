@@ -75,6 +75,8 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
             <path d="m16.5 16.5 4 4" />
           </svg>
           <input
+            id="chocolate-search"
+            name="q"
             type="search"
             placeholder="Søg efter smag eller navn"
             value={query}
@@ -84,7 +86,12 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
 
         <label className="select-field">
           <span>Årgang</span>
-          <select value={year} onChange={(event) => setYear(event.target.value)}>
+          <select
+            id="chocolate-year"
+            name="year"
+            value={year}
+            onChange={(event) => setYear(event.target.value)}
+          >
             <option value="alle">Alle år</option>
             {years.map((value) => (
               <option value={String(value)} key={value}>
@@ -96,7 +103,12 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
 
         <label className="select-field">
           <span>Chokolade</span>
-          <select value={shell} onChange={(event) => setShell(event.target.value)}>
+          <select
+            id="chocolate-shell"
+            name="shell"
+            value={shell}
+            onChange={(event) => setShell(event.target.value)}
+          >
             <option value="alle">Alle typer</option>
             {shells.map(([slug, name]) => (
               <option value={slug} key={slug}>

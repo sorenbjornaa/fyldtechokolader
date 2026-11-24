@@ -46,14 +46,18 @@ export async function getChocolates(): Promise<Chocolate[]> {
   cacheTag("chocolates");
 
   const chocolates = await fetchApi<Chocolate[]>(
-    "/chokolader?per_page=100&orderby=produktionsdato&order=desc",
+    "/chokolader?per_page=100&orderby=date&order=desc",
   );
 
   if (!Array.isArray(chocolates)) {
     throw new Error("WordPress API returnerede ikke en chokoladeliste.");
   }
 
-  return chocolates;
+  return chocolates.toSorted((a, b) => {
+    const aDate = a.productionDate ?? `${a.productionYear ?? 0}-00-00`;
+    const bDate = b.productionDate ?? `${b.productionYear ?? 0}-00-00`;
+    return bDate.localeCompare(aDate);
+  });
 }
 
 export async function getChocolate(slug: string): Promise<Chocolate | null> {

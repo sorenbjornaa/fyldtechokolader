@@ -224,7 +224,9 @@ h3 {
 .hero h1 {
   max-width: 11ch;
   margin-bottom: 20px;
-  font-size: clamp(3.5rem, 15vw, 8rem);
+  overflow-wrap: break-word;
+  font-size: clamp(2.25rem, 11vw, 8rem);
+  hyphens: auto;
   line-height: 0.87;
   text-wrap: balance;
 }
@@ -553,7 +555,7 @@ h3 {
 
 .detail__media {
   position: relative;
-  min-height: min(72svh, 720px);
+  min-height: min(52svh, 540px);
   overflow: hidden;
   background: var(--ft-color-surface-elevated);
 }
@@ -567,7 +569,7 @@ h3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 40px 16px 56px;
+  padding: 32px 16px 56px;
 }
 
 .back-link {
@@ -576,7 +578,7 @@ h3 {
   align-items: center;
   gap: 10px;
   align-self: flex-start;
-  margin-bottom: 48px;
+  margin-bottom: 20px;
   color: var(--ft-color-text-secondary);
   font-size: 0.8rem;
   font-weight: 700;
@@ -589,7 +591,9 @@ h3 {
 .detail h1 {
   max-width: 10ch;
   margin-bottom: 20px;
-  font-size: clamp(3.5rem, 13vw, 7.5rem);
+  overflow-wrap: break-word;
+  font-size: clamp(2.25rem, 10.5vw, 7.5rem);
+  hyphens: auto;
   line-height: 0.9;
 }
 
