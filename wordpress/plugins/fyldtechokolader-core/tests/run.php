@@ -10,6 +10,40 @@ use Fyldtechokolader\Core\Migration\LegacyContentMapper;
 use Fyldtechokolader\Core\Ratings\Score;
 use Fyldtechokolader\Core\Rest\ChocolateController;
 use Fyldtechokolader\Core\Content\TextNormalizer;
+use Fyldtechokolader\Core\Security\RequestAuthenticator;
+
+class WP_Error {
+	public function __construct(
+		public string $code,
+		public string $message,
+		public array $data = array()
+	) {}
+}
+
+class WP_REST_Request {
+	public function __construct(
+		private array $headers,
+		private string $method,
+		private string $route,
+		private string $body
+	) {}
+
+	public function get_header( string $name ): string {
+		return (string) ( $this->headers[ strtolower( $name ) ] ?? '' );
+	}
+
+	public function get_method(): string {
+		return $this->method;
+	}
+
+	public function get_route(): string {
+		return $this->route;
+	}
+
+	public function get_body(): string {
+		return $this->body;
+	}
+}
 
 $root = dirname( __DIR__ );
 define( 'ABSPATH', $root . '/' );
@@ -18,6 +52,7 @@ require_once $root . '/src/Migration/LegacySubmissionParser.php';
 require_once $root . '/src/Migration/LegacyContentMapper.php';
 require_once $root . '/src/Rest/ChocolateController.php';
 require_once $root . '/src/Content/TextNormalizer.php';
+require_once $root . '/src/Security/RequestAuthenticator.php';
 
 $sanitize_title_argument_count = null;
 
@@ -26,6 +61,18 @@ function sanitize_title( mixed $value ): string {
 	$sanitize_title_argument_count = func_num_args();
 
 	return strtolower( trim( (string) $value ) );
+}
+
+$test_options = array();
+
+function current_user_can( string $capability ): bool {
+	return false;
+}
+
+function get_option( string $name, mixed $default = false ): mixed {
+	global $test_options;
+
+	return $test_options[ $name ] ?? $default;
 }
 
 $failures = array();
@@ -133,6 +180,28 @@ foreach ( $shell_variants as $legacy_shell => $expected_slug ) {
 	$mapped_shell = $content_mapper->map( 999, '20251213', $legacy_shell );
 	$assert_same( $expected_slug, $mapped_shell['shell_slug'], 'Legacy-skaltypen normaliseres: ' . $legacy_shell );
 }
+
+$authenticator = new RequestAuthenticator();
+$missing_auth  = $authenticator->authorize( new WP_REST_Request( array(), 'POST', '/fyldtechokolader/v1/chokolader/miso/rating', '{}' ) );
+$assert_same( true, $missing_auth instanceof WP_Error, 'Manglende integrationshemmelighed afvises' );
+
+$secret                                      = str_repeat( 'a', 64 );
+$test_options['fyldtechokolader_api_secret'] = $secret;
+$timestamp                                   = (string) time();
+$route                                       = '/fyldtechokolader/v1/chokolader/miso/rating';
+$body                                        = '{"score":4,"voterToken":"test-browser-token"}';
+$canonical                                   = implode( "\n", array( $timestamp, 'POST', $route, hash( 'sha256', $body ) ) );
+$signature                                   = hash_hmac( 'sha256', $canonical, $secret );
+$request                                     = new WP_REST_Request(
+	array(
+		'x-fyldtechokolader-timestamp' => $timestamp,
+		'x-fyldtechokolader-signature' => $signature,
+	),
+	'POST',
+	$route,
+	$body
+);
+$assert_same( true, $authenticator->authorize( $request ), 'HMAC kan bruge hemmeligheden fra WordPress-optionen' );
 
 if ( $failures ) {
 	fwrite( STDERR, implode( PHP_EOL, $failures ) . PHP_EOL );

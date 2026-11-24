@@ -1071,43 +1071,43 @@ h3 {
   }
 
   .chocolate-grid--masonry {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-columns: repeat(24, minmax(0, 1fr));
     grid-auto-rows: 8px;
     gap: 8px 32px;
     align-items: start;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 1) {
-    grid-column: span 5;
+    grid-column: span 9;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 2) {
-    grid-column: span 3;
+    grid-column: span 7;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 3) {
-    grid-column: span 4;
+    grid-column: span 8;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 4) {
-    grid-column: span 3;
+    grid-column: span 7;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 5) {
-    grid-column: span 4;
+    grid-column: span 8;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n) {
-    grid-column: span 5;
+    grid-column: span 9;
   }
 
   .chocolate-grid--masonry .chocolate-card:only-child {
-    grid-column: span 6;
+    grid-column: span 12;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 2) .chocolate-card__media,
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 4) .chocolate-card__media {
-    aspect-ratio: 1;
+    aspect-ratio: 5 / 6;
   }
 
   .chocolate-grid--masonry .chocolate-card:nth-child(6n + 3) .chocolate-card__media,

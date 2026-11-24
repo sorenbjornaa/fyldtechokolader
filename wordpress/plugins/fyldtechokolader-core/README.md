@@ -4,7 +4,7 @@ Projektspecifikt WordPress-plugin til datamodel, individuelle ratings, kontrolle
 
 ## Status
 
-Version `0.1.3` tilføjer den kontrollerede migrering fra legacy-år og fritekst-skaltyper til den strukturerede indholdsmodel.
+Version `0.1.4` gør ratingintegrationen klar til drift på hosts, hvor `wp-config.php` ikke kan ændres automatisk. En `wp-config.php`-konstant har fortsat førsteprioritet, men pluginet kan som fallback læse hemmeligheden fra en ikke-autoloadet WordPress-option.
 
 Pluginet indeholder:
 
@@ -59,6 +59,14 @@ define( 'FYLDTECHOKOLADER_API_SECRET', 'en-tilfaeldig-hemmelighed-paa-mindst-32-
 ```
 
 Samme hemmelighed gemmes som en krypteret environment variable i Vercel. Den sendes aldrig til browseren.
+
+Hvis hostens `wp-config.php` ikke er tilgængelig, kan den samme værdi gemmes i databasen uden autoload:
+
+```bash
+wp option update fyldtechokolader_api_secret '<hemmelighed>' --autoload=no
+```
+
+Konstanten i `wp-config.php` har altid forrang over optionen.
 
 ## Legacy-import
 

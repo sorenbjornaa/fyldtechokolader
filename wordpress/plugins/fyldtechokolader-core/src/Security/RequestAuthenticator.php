@@ -14,13 +14,16 @@ defined( 'ABSPATH' ) || exit;
 
 final class RequestAuthenticator {
 	private const MAX_CLOCK_SKEW = 300;
+	private const SECRET_OPTION  = 'fyldtechokolader_api_secret';
 
 	public function authorize( WP_REST_Request $request ): true|WP_Error {
 		if ( current_user_can( 'manage_options' ) ) {
 			return true;
 		}
 
-		if ( ! defined( 'FYLDTECHOKOLADER_API_SECRET' ) || strlen( FYLDTECHOKOLADER_API_SECRET ) < 32 ) {
+		$secret = $this->secret();
+
+		if ( strlen( $secret ) < 32 ) {
 			return new WP_Error(
 				'fyldtechokolader_secret_missing',
 				'Ratingintegrationen er ikke konfigureret.',
@@ -48,9 +51,19 @@ final class RequestAuthenticator {
 				hash( 'sha256', $request->get_body() ),
 			)
 		);
-		$expected  = hash_hmac( 'sha256', $canonical, FYLDTECHOKOLADER_API_SECRET );
+		$expected  = hash_hmac( 'sha256', $canonical, $secret );
 
 		return hash_equals( $expected, strtolower( $signature ) ) ? true : $this->unauthorized();
+	}
+
+	private function secret(): string {
+		if ( defined( 'FYLDTECHOKOLADER_API_SECRET' ) ) {
+			return (string) constant( 'FYLDTECHOKOLADER_API_SECRET' );
+		}
+
+		$secret = get_option( self::SECRET_OPTION, '' );
+
+		return is_string( $secret ) ? trim( $secret ) : '';
 	}
 
 	private function unauthorized(): WP_Error {
