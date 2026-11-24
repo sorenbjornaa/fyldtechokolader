@@ -81,5 +81,7 @@
 
 **Første live-rating gennemført 24.11.2026:** Søren valgte `Citron lakrids` (`citron-lakrids-2`) og scoren 5/7. Ratingen blev indsendt gennem den deployede slider, gemt af det signerede WordPress-endpoint og bekræftet af både UI og API. Chokoladen gik fra 3 ratings med gennemsnit 7,0 til 4 ratings med gennemsnit 6,5; fordelingen er tre 7-taller og ét 5-tal. Den samlede ratingtabel steg fra 206 til 207 rækker. Browseren viste succesbeskeden uden konsolfejl.
 
+**Ratingændring verificeret og UX-rettelser klargjort 24.11.2026:** Søren har selv bedømt og efterfølgende ændret sin bedømmelse af Safran & Kardemomme og Æble Tarte Tatin. I begge tilfælde tæller browseren kun én rating, mens gennemsnittet opdateres. På preview-grenen `rating-ux-qa` er ratingeditoren ændret til neutral start uden aktive stjerner, deaktiveret gem indtil valg, direkte pointer-capture fra første drag samt et forsinket, diskret hånd-hint, der fjernes ved første interaktion og respekterer `prefers-reduced-motion`. Det eksisterende Adobe Fonts-webprojekt `ojv2mga`, som også bruges på WordPress-sitet, indlæser nu de licenserede familier `bely-display` og `bd-supper`; H1 og brødtekst er browserverificeret med de korrekte webfonts. Lokal mobilkontrol ved 390 px, første-drag-test, lint, TypeScript og produktionsbuild består. Domæneskift er fortsat udsat efter Sørens ønske.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 

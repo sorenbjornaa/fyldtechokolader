@@ -11,8 +11,8 @@
   --ft-color-rating-active: #ceb261;
   --ft-color-rating-inactive: #8e6657;
   --ft-color-line: rgba(231, 221, 201, 0.18);
-  --ft-font-display: "Bely Display", "Iowan Old Style", Georgia, serif;
-  --ft-font-body: "BD Supper", "Avenir Next", Avenir, sans-serif;
+  --ft-font-display: "bely-display", "Iowan Old Style", Georgia, serif;
+  --ft-font-body: "bd-supper", "Avenir Next", Avenir, sans-serif;
   --ft-radius-sm: 4px;
   --ft-radius-md: 8px;
   --ft-radius-lg: 16px;
@@ -376,7 +376,7 @@ h3 {
 }
 
 .rating-slider {
-  --rating-progress: 57.1429%;
+  --rating-progress: 0%;
   position: relative;
   width: 100%;
   height: 62px;
@@ -384,7 +384,14 @@ h3 {
   border: 1px solid var(--ft-color-action-primary);
   border-radius: var(--ft-radius-lg);
   background: var(--ft-color-surface-elevated);
+  cursor: grab;
   isolation: isolate;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.rating-slider:active {
+  cursor: grabbing;
 }
 
 .rating-slider__fill {
@@ -422,6 +429,56 @@ h3 {
   fill: #fff;
 }
 
+.rating-slider__hint {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 18%;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 50%;
+  background: rgba(39, 22, 20, 0.72);
+  color: #fff;
+  opacity: 0;
+  place-items: center;
+  pointer-events: none;
+  animation: rating-drag-hint 2.2s ease-in-out 1.25s 2;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+}
+
+.rating-slider__hint svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+@keyframes rating-drag-hint {
+  0%,
+  100% {
+    left: 18%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+
+  12%,
+  78% {
+    opacity: 0.94;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  48% {
+    left: 82%;
+    opacity: 0.94;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 .rating-slider input[type="range"] {
   position: absolute;
   z-index: 2;
@@ -429,13 +486,8 @@ h3 {
   width: 100%;
   height: 100%;
   margin: 0;
-  cursor: grab;
   opacity: 0;
-  touch-action: pan-y;
-}
-
-.rating-slider input[type="range"]:active {
-  cursor: grabbing;
+  pointer-events: none;
 }
 
 .rating-slider:focus-within {
@@ -487,6 +539,10 @@ h3 {
 .rating-form button:disabled {
   cursor: wait;
   opacity: 0.6;
+}
+
+.rating-form__actions .button:disabled {
+  cursor: not-allowed;
 }
 
 .introduction {
@@ -1128,5 +1184,9 @@ h3 {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .rating-slider__hint {
+    display: none;
   }
 }

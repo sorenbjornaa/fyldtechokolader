@@ -14,6 +14,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="da">
+      <head>
+        <link rel="preconnect" href="https://use.typekit.net" />
+        <link rel="preconnect" href="https://p.typekit.net" />
+        <link
+          rel="stylesheet"
+          href="https://use.typekit.net/ojv2mga.css"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
