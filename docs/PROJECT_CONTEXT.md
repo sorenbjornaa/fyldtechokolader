@@ -59,5 +59,7 @@
 
 **Backup bekræftet 24.11.2026:** Søren har lavet en ny backup efter installation og godkendt dry-run. Forudsætningen for at starte den kontrollerede import af de 206 ratings er dermed opfyldt.
 
+**Legacy-import gennemført og verificeret 24.11.2026:** Ratingtabellen indeholder præcis 206 rækker med 206 unikke `legacy_submission_id`-værdier. Alle rækker har kilden `legacy`, ingen mangler legacy-ID, scoreintervallet er 1–7, og ratings er fordelt på alle 28 chokolader. REST API'ets antal og gennemsnit matcher dry-run-rapporten for samtlige chokolader. De 44 historiske scores uden chokolade-ID er ikke importeret.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
