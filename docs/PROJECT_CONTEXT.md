@@ -55,5 +55,7 @@
 
 **Version 0.1.2 verificeret på CMS 24.11.2026:** Pluginet er aktivt. API'et returnerer fortsat alle 28 chokolader, og titler, beskrivelser og SEO-titler returneres nu som ren tekst uden HTML-entiteter. Ratingtabellen indeholder fortsat 0 rækker, så installationen har ikke startet importen. Næste trin er at køre den skrivebeskyttede dry-run under Værktøjer → Chokoladeratings.
 
+**Administrativ dry-run godkendt 24.11.2026:** Pluginets egen dry-run viser 259 indsendelser, 250 gyldige scores, præcis 206 sikre kandidater og 44 gyldige scores uden chokolade-ID. Rapporten indeholder alle 28 chokolader, og summen af deres ratingantal er 206. Resultatet matcher både den tekniske audit og den uafhængige SQL-kontrol. Ingen data er skrevet; faktisk import afventer en ny backupbekræftelse.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
