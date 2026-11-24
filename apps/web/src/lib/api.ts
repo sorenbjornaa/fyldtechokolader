@@ -14,15 +14,30 @@ function apiUrl(path: string): string {
 }
 
 async function fetchApi<T>(path: string): Promise<T> {
-  const response = await fetch(apiUrl(path), {
-    headers: { Accept: "application/json" },
-  });
+  const maxAttempts = 3;
 
-  if (!response.ok) {
-    throw new Error(`WordPress API svarede med status ${response.status}.`);
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const response = await fetch(apiUrl(path), {
+      headers: { Accept: "application/json" },
+    });
+
+    if (response.ok) {
+      return (await response.json()) as T;
+    }
+
+    const canRetry = response.status === 429 || response.status >= 500;
+    if (!canRetry || attempt === maxAttempts) {
+      throw new Error(`WordPress API svarede med status ${response.status}.`);
+    }
+
+    const retryAfter = Number(response.headers.get("retry-after"));
+    const delay = Number.isFinite(retryAfter)
+      ? Math.min(retryAfter * 1000, 3000)
+      : attempt * 750;
+    await new Promise((resolve) => setTimeout(resolve, delay));
   }
 
-  return (await response.json()) as T;
+  throw new Error("WordPress API kunne ikke hentes.");
 }
 
 export async function getChocolates(): Promise<Chocolate[]> {
@@ -42,21 +57,6 @@ export async function getChocolates(): Promise<Chocolate[]> {
 }
 
 export async function getChocolate(slug: string): Promise<Chocolate | null> {
-  "use cache";
-  cacheLife("minutes");
-  cacheTag("chocolates", `chocolate-${slug}`);
-
-  const response = await fetch(apiUrl(`/chokolader/${encodeURIComponent(slug)}`), {
-    headers: { Accept: "application/json" },
-  });
-
-  if (response.status === 404) {
-    return null;
-  }
-
-  if (!response.ok) {
-    throw new Error(`WordPress API svarede med status ${response.status}.`);
-  }
-
-  return (await response.json()) as Chocolate;
+  const chocolates = await getChocolates();
+  return chocolates.find((chocolate) => chocolate.slug === slug) ?? null;
 }
