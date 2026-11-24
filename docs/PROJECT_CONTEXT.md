@@ -83,5 +83,7 @@
 
 **Ratingændring verificeret og UX-rettelser klargjort 24.11.2026:** Søren har selv bedømt og efterfølgende ændret sin bedømmelse af Safran & Kardemomme og Æble Tarte Tatin. I begge tilfælde tæller browseren kun én rating, mens gennemsnittet opdateres. På preview-grenen `rating-ux-qa` er ratingeditoren ændret til neutral start uden aktive stjerner, deaktiveret gem indtil valg, direkte pointer-capture fra første drag samt et forsinket, diskret hånd-hint, der fjernes ved første interaktion og respekterer `prefers-reduced-motion`. Det eksisterende Adobe Fonts-webprojekt `ojv2mga`, som også bruges på WordPress-sitet, indlæser nu de licenserede familier `bely-display` og `bd-supper`; H1 og brødtekst er browserverificeret med de korrekte webfonts. Lokal mobilkontrol ved 390 px, første-drag-test, lint, TypeScript og produktionsbuild består. Domæneskift er fortsat udsat efter Sørens ønske.
 
+**Rating-UX deployet til production 24.11.2026:** Søren godkendte, at rettelserne måtte pushes til Vercel. Grenen `rating-ux-qa` er fast-forward-merget til `main` på commit `63c58fb`, og production-deployet på `https://fyldtechokolader.vercel.app` er `READY`. Livekontrollen bekræfter Bely Display og BD Supper, neutral `–/7`-start uden aktive stjerner, deaktiveret gem før valg, første drag i samme pointerbevægelse samt fejlfri annullering. Ingen rating blev gemt under kontrollen, og browserkonsollen er uden fejl.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
