@@ -67,5 +67,7 @@
 
 **Indholdsmigrering dry-run godkendt 24.11.2026:** Version 0.1.3 er aktiv på CMS'et. Pluginets administrationsflow fandt og validerede præcis 28 chokolader. Alle produktionsår og de 26 kendte produktionsdatoer er korrekte; Miso og Saba & Balsamico har kun år. Skaltypemappingen matcher de godkendte valg, inklusive Pistacie som mørk, Appelsin som lys og Karamel – citron & lakrids som `uden-skal`. Ingen data er ændret. Faktisk migrering afventer en frisk backup.
 
+**Indholdsmigrering gennemført og verificeret 24.11.2026:** Alle 28 publicerede chokolader har nu `produktionsaar` og præcis én term i `chokolade_skaltype`; 26 har en kendt `produktionsdato`, mens Miso og Saba & Balsamico korrekt ikke har en præcis dato. Fordelingen er 12 hvid, 9 mørk, 4 lys, 2 Dulcey og 1 uden skal. REST API'et returnerer de nye værdier for alle 28 poster, og de fem særkontrollerede poster matcher beslutningerne. Migreringsversion 1 er registreret. Commit-rapporten viser fortsat “Skal ændres”, fordi status beregnes før skrivning; dette er en kosmetisk UI-fejl og ikke en datamigreringsfejl.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
