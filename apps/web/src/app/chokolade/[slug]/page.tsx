@@ -122,19 +122,21 @@ async function ChocolatePageContent({ params }: ChocolatePageProps) {
       <SiteHeader />
       <main>
         <article className="detail">
-          <div className="detail__media">
-            {chocolate.image ? (
-              <Image
-                src={chocolate.image.src}
-                alt={chocolate.image.alt || chocolate.title}
-                fill
-                priority
-                sizes="(max-width: 899px) 100vw, 58vw"
-                className="detail__image"
-              />
-            ) : (
-              <div className="chocolate-card__placeholder" aria-hidden="true" />
-            )}
+          <div className="detail__media-shell">
+            <div className="detail__media">
+              {chocolate.image ? (
+                <Image
+                  src={chocolate.image.src}
+                  alt={chocolate.image.alt || chocolate.title}
+                  fill
+                  priority
+                  sizes="(max-width: 899px) 100vw, 58vw"
+                  className="detail__image"
+                />
+              ) : (
+                <div className="chocolate-card__placeholder" aria-hidden="true" />
+              )}
+            </div>
           </div>
 
           <div className="detail__content">

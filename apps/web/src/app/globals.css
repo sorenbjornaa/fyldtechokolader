@@ -713,6 +713,10 @@ h3 {
   background: var(--ft-color-surface-elevated);
 }
 
+.detail__media-shell {
+  min-width: 0;
+}
+
 .detail__image {
   object-fit: cover;
   animation: hero-image-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -1028,10 +1032,14 @@ h3 {
     grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr);
   }
 
-  .detail__media {
+  .detail__media-shell {
     position: sticky;
     top: 0;
     height: 100svh;
+  }
+
+  .detail__media {
+    height: 100%;
   }
 
   .detail__content {
