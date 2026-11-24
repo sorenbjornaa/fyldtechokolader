@@ -4,7 +4,7 @@ Projektspecifikt WordPress-plugin til datamodel, individuelle ratings, kontrolle
 
 ## Status
 
-Version `0.1.2` normaliserer HTML-entiteter i API-tekst og tilføjer en kontrolleret administrationsside til legacy-importen.
+Version `0.1.3` tilføjer den kontrollerede migrering fra legacy-år og fritekst-skaltyper til den strukturerede indholdsmodel.
 
 Pluginet indeholder:
 
@@ -14,9 +14,17 @@ Pluginet indeholder:
 - Gennemsnit, antal og fordeling på skalaen 1–7.
 - Offentlige læse-endpoints og et HMAC-beskyttet skrive-endpoint.
 - Ratingoversigt og kontrolleret legacy-import under **Værktøjer → Chokoladeratings**.
+- Dry-run og kontrolleret indholdsmigrering under **Værktøjer → Chokoladeindhold**.
+- ACF-gruppen **Chokolade – data** med smagsbeskrivelse, produktionsår, produktionsdato og badge.
 - WP-CLI-import af historiske Elementor-ratings med obligatorisk dry-run som standard.
 
 Pluginet sletter ikke data ved deaktivering eller afinstallation.
+
+## Indholdsmigrering
+
+Under **Værktøjer → Chokoladeindhold** kan en administrator først køre en skrivebeskyttet dry-run for alle 28 chokolader. Den viser legacy-dato, nyt produktionsår og -dato samt gammel og ny skaltype pr. post.
+
+Den faktiske migrering kræver en frisk backup og kontrolteksten `MIGRER 28`. Den opretter de nye meta-værdier og tildeler præcis én term i `chokolade_skaltype`, men sletter ikke legacy-felterne eller den gamle taxonomy. Migreringen er idempotent og kan kontrolleres med en ny dry-run efter gennemførelsen.
 
 ## REST API
 

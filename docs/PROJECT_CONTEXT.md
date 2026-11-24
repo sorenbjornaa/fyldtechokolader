@@ -63,5 +63,7 @@
 
 **Indholdsmigrering auditeret 24.11.2026:** De to chokolader uden `arstal` kan fastlægges uden gæt: Miso til 2023 og Saba & Balsamico til 2025, understøttet af både legacy-årstaxonomi og oprettelsesår. De øvrige 26 har en konkret legacy-dato, som kan opdeles i `produktionsaar` og `produktionsdato`. Skaltypeværdierne kan hovedsageligt normaliseres direkte, men tre beslutninger mangler: Pistacie-postens ACF-værdi siger hvid, mens titel og taxonomy siger mørk; `Karamel` skal enten have egen type eller mappes til Dulcey/andet; `Kokusmælke chokolade` skal enten have egen type eller mappes til lys/andet.
 
+**Indholdsmapping besluttet og version 0.1.3 bygget 24.11.2026:** Pistacie mappes til mørk, Appelsins kokosmælkebaserede chokolade mappes til lys, og Karamel – citron & lakrids mappes til den nye type `uden-skal` (“Uden chokoladeskal”). Pluginet registrerer ACF-gruppen “Chokolade – data” og tilføjer Værktøjer → Chokoladeindhold med skrivebeskyttet dry-run samt en kontrolleret migrering af alle 28 poster. Skrivning kræver frisk backup og kontrolteksten `MIGRER 28`; legacy-felterne bevares. Miso og Saba & Balsamico får kun verificerede år, ikke opdigtede datoer. Domænetests, PHP-syntaks og WordPress Coding Standards består.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 

@@ -3,7 +3,7 @@
  * Plugin Name:       Fyldtechokolader Core
  * Plugin URI:        https://github.com/sorenbjornaa/fyldtechokolader
  * Description:       Datamodel, ratings, legacy-import og REST API til Fyldtechokolader.
- * Version:           0.1.2
+ * Version:           0.1.3
  * Requires at least: 6.7
  * Requires PHP:      8.1
  * Author:            Soren Bjornaa
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'FYLDTECHOKOLADER_CORE_VERSION', '0.1.2' );
+define( 'FYLDTECHOKOLADER_CORE_VERSION', '0.1.3' );
 define( 'FYLDTECHOKOLADER_CORE_FILE', __FILE__ );
 define( 'FYLDTECHOKOLADER_CORE_PATH', plugin_dir_path( __FILE__ ) );
 

@@ -8,11 +8,13 @@
 namespace Fyldtechokolader\Core;
 
 use Fyldtechokolader\Core\Admin\RatingsPage;
+use Fyldtechokolader\Core\Admin\ContentMigrationPage;
 use Fyldtechokolader\Core\Cli\RatingsCommand;
 use Fyldtechokolader\Core\Content\ChocolateRepository;
 use Fyldtechokolader\Core\Content\ContentRegistrar;
 use Fyldtechokolader\Core\Infrastructure\RateLimiter;
 use Fyldtechokolader\Core\Migration\LegacyRatingImporter;
+use Fyldtechokolader\Core\Migration\ContentMigrator;
 use Fyldtechokolader\Core\Ratings\RatingRepository;
 use Fyldtechokolader\Core\Ratings\RatingService;
 use Fyldtechokolader\Core\Rest\ChocolateController;
@@ -30,8 +32,10 @@ final class Plugin {
 		$rating_service    = new RatingService( $rating_repository );
 		$chocolates        = new ChocolateRepository( $rating_repository );
 		$legacy_importer   = new LegacyRatingImporter( $wpdb, $rating_repository );
+		$content_migrator  = new ContentMigrator( $wpdb );
 
 		add_action( 'init', array( $content_registrar, 'register' ), 20 );
+		add_action( 'acf/init', array( $content_registrar, 'register_acf_fields' ) );
 		add_action(
 			'rest_api_init',
 			static function () use ( $chocolates, $rating_service ): void {
@@ -49,9 +53,13 @@ final class Plugin {
 
 		if ( is_admin() ) {
 			$ratings_page = new RatingsPage( $rating_repository, $legacy_importer );
+			$content_page = new ContentMigrationPage( $content_migrator );
 			add_action( 'admin_menu', array( $ratings_page, 'register' ) );
+			add_action( 'admin_menu', array( $content_page, 'register' ) );
 			add_action( 'admin_post_fyldtechokolader_legacy_dry_run', array( $ratings_page, 'handle_dry_run' ) );
 			add_action( 'admin_post_fyldtechokolader_legacy_import', array( $ratings_page, 'handle_import' ) );
+			add_action( 'admin_post_fyldtechokolader_content_dry_run', array( $content_page, 'handle_dry_run' ) );
+			add_action( 'admin_post_fyldtechokolader_content_import', array( $content_page, 'handle_import' ) );
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {

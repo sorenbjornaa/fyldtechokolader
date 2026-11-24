@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 use Fyldtechokolader\Core\Migration\LegacySubmissionParser;
+use Fyldtechokolader\Core\Migration\LegacyContentMapper;
 use Fyldtechokolader\Core\Ratings\Score;
 use Fyldtechokolader\Core\Rest\ChocolateController;
 use Fyldtechokolader\Core\Content\TextNormalizer;
@@ -14,6 +15,7 @@ $root = dirname( __DIR__ );
 define( 'ABSPATH', $root . '/' );
 require_once $root . '/src/Ratings/Score.php';
 require_once $root . '/src/Migration/LegacySubmissionParser.php';
+require_once $root . '/src/Migration/LegacyContentMapper.php';
 require_once $root . '/src/Rest/ChocolateController.php';
 require_once $root . '/src/Content/TextNormalizer.php';
 
@@ -97,6 +99,40 @@ $assert_same( 1, $sanitize_title_argument_count, 'WordPress-requesten sendes ikk
 $assert_same( 'Safran & Kardemomme', TextNormalizer::plain( 'Safran &amp; Kardemomme' ), 'HTML-entiteter normaliseres' );
 $assert_same( 'Karamel – citron', TextNormalizer::plain( '<strong>Karamel</strong> &#8211; citron' ), 'HTML-tags fjernes fra API-tekst' );
 $assert_same( 'Miso', TextNormalizer::plain( '&lt;em&gt;Miso&lt;/em&gt;' ), 'Kodede HTML-tags fjernes fra API-tekst' );
+
+$content_mapper = new LegacyContentMapper();
+$pistachio      = $content_mapper->map( 56, '20231216', 'Hvid Chokolade' );
+$assert_same( 2023, $pistachio['production_year'], 'Produktionsår udledes fra legacy-dato' );
+$assert_same( '2023-12-16', $pistachio['production_date'], 'Produktionsdato normaliseres' );
+$assert_same( 'moerk', $pistachio['shell_slug'], 'Pistacie følger den godkendte mørke skal' );
+
+$miso = $content_mapper->map( 109, '', 'Mørk chokolade' );
+$assert_same( 2023, $miso['production_year'], 'Miso får det verificerede produktionsår' );
+$assert_same( null, $miso['production_date'], 'Miso får ikke en opdigtet produktionsdato' );
+
+$orange = $content_mapper->map( 111, '20231217', 'Kokusmælke chokolade' );
+$assert_same( 'lys', $orange['shell_slug'], 'Kokosmælkechokolade mappes til lys efter beslutning' );
+
+$caramel = $content_mapper->map( 475, '20251213', 'Karamel' );
+$assert_same( 'uden-skal', $caramel['shell_slug'], 'Karamel uden skal får sin egen kategori' );
+
+$saba = $content_mapper->map( 458, '', 'Lys Chokolade' );
+$assert_same( 2025, $saba['production_year'], 'Saba og Balsamico får det verificerede produktionsår' );
+$assert_same( null, $saba['production_date'], 'Saba og Balsamico får ikke en opdigtet produktionsdato' );
+
+$shell_variants = array(
+	'Hvid Chokolade'   => 'hvid',
+	'hvid ckokolade'   => 'hvid',
+	'Mørk Chokolade'   => 'moerk',
+	'Mælke chokolade'  => 'lys',
+	'Lys Chokolade'    => 'lys',
+	'Dulce chokolade'  => 'dulcey',
+);
+
+foreach ( $shell_variants as $legacy_shell => $expected_slug ) {
+	$mapped_shell = $content_mapper->map( 999, '20251213', $legacy_shell );
+	$assert_same( $expected_slug, $mapped_shell['shell_slug'], 'Legacy-skaltypen normaliseres: ' . $legacy_shell );
+}
 
 if ( $failures ) {
 	fwrite( STDERR, implode( PHP_EOL, $failures ) . PHP_EOL );

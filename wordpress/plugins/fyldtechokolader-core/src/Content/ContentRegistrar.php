@@ -18,6 +18,65 @@ final class ContentRegistrar {
 		$this->register_shell_taxonomy();
 	}
 
+	public function register_acf_fields(): void {
+		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+			return;
+		}
+
+		acf_add_local_field_group(
+			array(
+				'key'      => 'group_fyldtechokolader_chokolade_data',
+				'title'    => __( 'Chokolade – data', 'fyldtechokolader-core' ),
+				'fields'   => array(
+					array(
+						'key'       => 'field_fyldtechokolader_smagsbeskrivelse',
+						'label'     => __( 'Smagsbeskrivelse', 'fyldtechokolader-core' ),
+						'name'      => 'smagsbeskrivelse',
+						'type'      => 'textarea',
+						'maxlength' => 240,
+						'rows'      => 3,
+					),
+					array(
+						'key'      => 'field_fyldtechokolader_produktionsaar',
+						'label'    => __( 'Produktionsår', 'fyldtechokolader-core' ),
+						'name'     => 'produktionsaar',
+						'type'     => 'number',
+						'required' => 1,
+						'min'      => 2000,
+						'max'      => 2100,
+					),
+					array(
+						'key'            => 'field_fyldtechokolader_produktionsdato',
+						'label'          => __( 'Produktionsdato', 'fyldtechokolader-core' ),
+						'name'           => 'produktionsdato',
+						'type'           => 'date_picker',
+						'display_format' => 'd/m/Y',
+						'return_format'  => 'Y-m-d',
+						'first_day'      => 1,
+					),
+					array(
+						'key'       => 'field_fyldtechokolader_badge',
+						'label'     => __( 'Badge', 'fyldtechokolader-core' ),
+						'name'      => 'badge',
+						'type'      => 'text',
+						'maxlength' => 40,
+					),
+				),
+				'location' => array(
+					array(
+						array(
+							'param'    => 'post_type',
+							'operator' => '==',
+							'value'    => self::POST_TYPE,
+						),
+					),
+				),
+				'position' => 'normal',
+				'active'   => true,
+			)
+		);
+	}
+
 	private function register_post_type(): void {
 		if ( post_type_exists( self::POST_TYPE ) ) {
 			return;

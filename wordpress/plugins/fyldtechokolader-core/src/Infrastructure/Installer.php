@@ -8,6 +8,7 @@
 namespace Fyldtechokolader\Core\Infrastructure;
 
 use Fyldtechokolader\Core\Content\ContentRegistrar;
+use Fyldtechokolader\Core\Migration\LegacyContentMapper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -47,13 +48,8 @@ final class Installer {
 	}
 
 	private function seed_shell_types(): void {
-		$terms = array(
-			'hvid'   => 'Hvid chokolade',
-			'lys'    => 'Lys/mælkechokolade',
-			'moerk'  => 'Mørk chokolade',
-			'dulcey' => 'Dulcey',
-			'andet'  => 'Andet',
-		);
+		$terms          = LegacyContentMapper::shell_types();
+		$terms['andet'] = 'Andet';
 
 		foreach ( $terms as $slug => $name ) {
 			if ( ! term_exists( $slug, ContentRegistrar::SHELL_TAXONOMY ) ) {
