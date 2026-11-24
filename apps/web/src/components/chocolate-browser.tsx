@@ -132,23 +132,6 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
         </label>
 
         <label className="select-field">
-          <span>Årgang</span>
-          <select
-            id="chocolate-year"
-            name="year"
-            value={year}
-            onChange={(event) => setYear(event.target.value)}
-          >
-            <option value="alle">Alle år</option>
-            {years.map((value) => (
-              <option value={String(value)} key={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="select-field">
           <span>Chokolade</span>
           <select
             id="chocolate-shell"
@@ -160,6 +143,23 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
             {shells.map(([slug, name]) => (
               <option value={slug} key={slug}>
                 {name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="select-field">
+          <span>Årgang</span>
+          <select
+            id="chocolate-year"
+            name="year"
+            value={year}
+            onChange={(event) => setYear(event.target.value)}
+          >
+            <option value="alle">Alle år</option>
+            {years.map((value) => (
+              <option value={String(value)} key={value}>
+                {value}
               </option>
             ))}
           </select>

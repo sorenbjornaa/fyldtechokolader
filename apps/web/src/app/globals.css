@@ -209,13 +209,19 @@ h3 {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(22, 11, 10, 0.24) 0%, rgba(22, 11, 10, 0.08) 30%, rgba(22, 11, 10, 0.86) 100%),
+    linear-gradient(
+      180deg,
+      rgba(22, 11, 10, 0.24) 0%,
+      rgba(22, 11, 10, 0.08) 30%,
+      rgba(22, 11, 10, 0.86) 100%
+    ),
     linear-gradient(90deg, rgba(24, 12, 11, 0.68), transparent 70%);
 }
 
 .hero__content {
   position: relative;
   z-index: 2;
+  max-height: 60vh;
   padding-top: calc(var(--ft-header-height) + 72px);
   padding-bottom: 96px;
   animation: hero-copy-in 800ms 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -275,7 +281,9 @@ h3 {
   font-size: 0.84rem;
   font-weight: 800;
   letter-spacing: 0.04em;
-  transition: translate 180ms ease, background-color 180ms ease;
+  transition:
+    translate 180ms ease,
+    background-color 180ms ease;
 }
 
 .button--primary {
@@ -286,6 +294,17 @@ h3 {
 .button--primary:hover {
   background: #dec775;
   translate: 0 -2px;
+}
+
+.button__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .rating {
@@ -687,7 +706,9 @@ h3 {
 
 .chocolate-card__image {
   object-fit: cover;
-  transition: scale 600ms cubic-bezier(0.22, 1, 0.36, 1), filter 300ms ease;
+  transition:
+    scale 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 300ms ease;
 }
 
 .chocolate-card__link:hover .chocolate-card__image {
@@ -699,7 +720,11 @@ h3 {
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(circle at 60% 30%, rgba(206, 178, 97, 0.2), transparent 28%),
+    radial-gradient(
+      circle at 60% 30%,
+      rgba(206, 178, 97, 0.2),
+      transparent 28%
+    ),
     var(--ft-color-surface-elevated);
 }
 
@@ -1161,13 +1186,21 @@ h3 {
     grid-column: span 12;
   }
 
-  .chocolate-grid--masonry .chocolate-card:nth-child(6n + 2) .chocolate-card__media,
-  .chocolate-grid--masonry .chocolate-card:nth-child(6n + 4) .chocolate-card__media {
+  .chocolate-grid--masonry
+    .chocolate-card:nth-child(6n + 2)
+    .chocolate-card__media,
+  .chocolate-grid--masonry
+    .chocolate-card:nth-child(6n + 4)
+    .chocolate-card__media {
     aspect-ratio: 5 / 6;
   }
 
-  .chocolate-grid--masonry .chocolate-card:nth-child(6n + 3) .chocolate-card__media,
-  .chocolate-grid--masonry .chocolate-card:nth-child(6n) .chocolate-card__media {
+  .chocolate-grid--masonry
+    .chocolate-card:nth-child(6n + 3)
+    .chocolate-card__media,
+  .chocolate-grid--masonry
+    .chocolate-card:nth-child(6n)
+    .chocolate-card__media {
     aspect-ratio: 3 / 4;
   }
 }

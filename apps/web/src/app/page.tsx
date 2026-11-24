@@ -58,7 +58,13 @@ export default async function Home() {
             />
             <Link className="button button--primary" href={`/chokolade/${hero.slug}`}>
               Se chokoladen
-              <span aria-hidden="true">↗</span>
+              <svg
+                className="button__icon"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+              >
+                <path d="M7 17 17 7M7 7h10v10" />
+              </svg>
             </Link>
           </div>
           <a className="hero__scroll" href="#chokolader">
