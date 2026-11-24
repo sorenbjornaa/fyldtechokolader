@@ -36,5 +36,16 @@
 5. Byg Next.js-frontenden mod det nye API.
 6. Forbind GitHub-repositoryet til Vercel.
 
+## Pluginarkitektur
+
+- WordPress-forretningslogikken samles i ét plugin: `fyldtechokolader-core`.
+- Pluginet opdeles internt i moduler til indholdsmodel, ratings, REST API, legacy-import, administration og infrastruktur.
+- Rating og REST API udgives ikke som separate plugins, fordi de deler datamodel, validering, versionsstyring og deployment.
+- Pluginet bygges og testes lokalt, før det installeres på CMS'et.
+
+## Implementeringsstatus
+
+**24.11.2026:** Lokal version `0.1.0` af `fyldtechokolader-core` er bygget. Den indeholder pluginregistrering, ratingtabel, ratingservice, HMAC-beskyttet skrive-endpoint, offentlige læse-endpoints, skrivebeskyttet adminoversigt og en idempotent WP-CLI-import med dry-run. Import med skrivning afbrydes, hvis analysen ikke finder præcis 206 sikre legacy-ratings. Composer-validering, domænetests, PHP-syntaks, WordPress Coding Standards og Git whitespace-kontrol består. Pluginet er endnu ikke installeret eller integrationstestet på CMS'et.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 

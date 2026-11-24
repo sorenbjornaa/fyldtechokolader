@@ -1,0 +1,82 @@
+<?php
+/**
+ * Dependency-free smoke tests for pure domain code.
+ */
+
+declare(strict_types=1);
+
+use Fyldtechokolader\Core\Migration\LegacySubmissionParser;
+use Fyldtechokolader\Core\Ratings\Score;
+
+$root = dirname( __DIR__ );
+require_once $root . '/src/Ratings/Score.php';
+require_once $root . '/src/Migration/LegacySubmissionParser.php';
+
+$failures = array();
+
+$assert_same = static function ( mixed $expected, mixed $actual, string $message ) use ( &$failures ): void {
+	if ( $expected !== $actual ) {
+		$failures[] = sprintf( '%s: forventede %s, fik %s', $message, var_export( $expected, true ), var_export( $actual, true ) );
+	}
+};
+
+$assert_same( 1, Score::from_mixed( 1 ), 'Score accepterer minimum' );
+$assert_same( 7, Score::from_mixed( '7' ), 'Score accepterer numerisk streng' );
+
+foreach ( array( 0, 8, 4.5, '4.5', 'abc' ) as $invalid_score ) {
+	$thrown = false;
+	try {
+		Score::from_mixed( $invalid_score );
+	} catch ( InvalidArgumentException ) {
+		$thrown = true;
+	}
+	$assert_same( true, $thrown, 'Score afviser ugyldig værdi' );
+}
+
+$parser = new LegacySubmissionParser();
+$parsed = $parser->parse(
+	array(
+		array(
+			'key'   => 'rating',
+			'value' => '6',
+		),
+		array(
+			'key'   => 'post_id',
+			'value' => '467',
+		),
+	)
+);
+$assert_same( 'candidate', $parsed['status'], 'Parser finder sikker kandidat' );
+$assert_same( 6, $parsed['score'], 'Parser finder score' );
+$assert_same( 467, $parsed['chocolate_id'], 'Parser finder post-ID' );
+
+$parsed_typo = $parser->parse(
+	array(
+		array(
+			'key'   => 'rading',
+			'value' => '5',
+		),
+		array(
+			'key'   => '812',
+			'value' => '812',
+		),
+	)
+);
+$assert_same( 'candidate', $parsed_typo['status'], 'Parser håndterer historiske feltnøgler' );
+
+$missing = $parser->parse(
+	array(
+		array(
+			'key'   => 'rating',
+			'value' => '4',
+		),
+	)
+);
+$assert_same( 'missing_chocolate', $missing['status'], 'Parser isolerer ratings uden chokolade-ID' );
+
+if ( $failures ) {
+	fwrite( STDERR, implode( PHP_EOL, $failures ) . PHP_EOL );
+	exit( 1 );
+}
+
+echo "Alle domænetests bestod.\n";

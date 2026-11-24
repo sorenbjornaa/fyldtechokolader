@@ -1,0 +1,13 @@
+{
+  "name": "sorenbjornaa/fyldtechokolader-core",
+  "description": "WordPress core-plugin til Fyldtechokolader",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.1"
+  },
+  "scripts": {
+    "test": "php tests/run.php",
+    "lint": "find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l"
+  }
+}
