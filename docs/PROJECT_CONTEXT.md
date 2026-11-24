@@ -77,5 +77,7 @@
 
 **Version 0.1.4 og ratingkonfiguration 24.11.2026:** En frisk backup er bekræftet. Pluginversion `0.1.4` kan hente HMAC-hemmeligheden fra `FYLDTECHOKOLADER_API_SECRET` i `wp-config.php` eller som fallback fra den ikke-autoloadede WordPress-option `fyldtechokolader_api_secret`. Den fælles hemmelighed er oprettet og gemt uden eksponering i både WordPress og Vercel for development, preview og production. Testpakken, PHP-syntaks og WordPress Coding Standards består, og installations-ZIP'en er bygget. CMS'et kører fortsat `0.1.3`; `0.1.4` skal installeres, før første end-to-end-rating kan gennemføres.
 
+**Version 0.1.4 verificeret og signeringsflow testet 24.11.2026:** Pluginet er installeret, aktivt og rapporterer version `0.1.4`. En usigneret kontrolrequest direkte til WordPress afvises med HTTP 401, mens den tilsvarende request gennem Vercels Next.js-route bliver HMAC-signeret, godkendt af WordPress og når frem til den forventede 404 for en ikke-eksisterende test-slug. Dermed er den fælles hemmelighed og hele server-til-server-flowet verificeret uden at oprette en rating. Ratingtabellen indeholder fortsat præcis 206 rækker. Live-UI'en åbner slideren, reagerer på tastaturinput og kan annulleres uden konsolfejl. En virkelig rating afventer et subjektivt valg af chokolade og score.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
