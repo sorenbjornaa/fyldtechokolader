@@ -65,5 +65,7 @@
 
 **Indholdsmapping besluttet og version 0.1.3 bygget 24.11.2026:** Pistacie mappes til mørk, Appelsins kokosmælkebaserede chokolade mappes til lys, og Karamel – citron & lakrids mappes til den nye type `uden-skal` (“Uden chokoladeskal”). Pluginet registrerer ACF-gruppen “Chokolade – data” og tilføjer Værktøjer → Chokoladeindhold med skrivebeskyttet dry-run samt en kontrolleret migrering af alle 28 poster. Skrivning kræver frisk backup og kontrolteksten `MIGRER 28`; legacy-felterne bevares. Miso og Saba & Balsamico får kun verificerede år, ikke opdigtede datoer. Domænetests, PHP-syntaks og WordPress Coding Standards består.
 
+**Indholdsmigrering dry-run godkendt 24.11.2026:** Version 0.1.3 er aktiv på CMS'et. Pluginets administrationsflow fandt og validerede præcis 28 chokolader. Alle produktionsår og de 26 kendte produktionsdatoer er korrekte; Miso og Saba & Balsamico har kun år. Skaltypemappingen matcher de godkendte valg, inklusive Pistacie som mørk, Appelsin som lys og Karamel – citron & lakrids som `uden-skal`. Ingen data er ændret. Faktisk migrering afventer en frisk backup.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 
