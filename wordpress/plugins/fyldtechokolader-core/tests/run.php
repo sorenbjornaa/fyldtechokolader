@@ -7,10 +7,22 @@ declare(strict_types=1);
 
 use Fyldtechokolader\Core\Migration\LegacySubmissionParser;
 use Fyldtechokolader\Core\Ratings\Score;
+use Fyldtechokolader\Core\Rest\ChocolateController;
 
 $root = dirname( __DIR__ );
+define( 'ABSPATH', $root . '/' );
 require_once $root . '/src/Ratings/Score.php';
 require_once $root . '/src/Migration/LegacySubmissionParser.php';
+require_once $root . '/src/Rest/ChocolateController.php';
+
+$sanitize_title_argument_count = null;
+
+function sanitize_title( mixed $value ): string {
+	global $sanitize_title_argument_count;
+	$sanitize_title_argument_count = func_num_args();
+
+	return strtolower( trim( (string) $value ) );
+}
 
 $failures = array();
 
@@ -73,6 +85,13 @@ $missing = $parser->parse(
 	)
 );
 $assert_same( 'missing_chocolate', $missing['status'], 'Parser isolerer ratings uden chokolade-ID' );
+
+$controller = ( new ReflectionClass( ChocolateController::class ) )->newInstanceWithoutConstructor();
+$method     = new ReflectionMethod( ChocolateController::class, 'collection_args' );
+$arguments  = $method->invoke( $controller );
+$slug       = $arguments['skaltype']['sanitize_callback']( '', new stdClass(), 'skaltype' );
+$assert_same( '', $slug, 'Tomt skaltypefilter kan saniteres' );
+$assert_same( 1, $sanitize_title_argument_count, 'WordPress-requesten sendes ikke som fallback til sanitize_title' );
 
 if ( $failures ) {
 	fwrite( STDERR, implode( PHP_EOL, $failures ) . PHP_EOL );

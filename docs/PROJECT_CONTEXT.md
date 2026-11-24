@@ -47,5 +47,7 @@
 
 **24.11.2026:** Lokal version `0.1.0` af `fyldtechokolader-core` er bygget. Den indeholder pluginregistrering, ratingtabel, ratingservice, HMAC-beskyttet skrive-endpoint, offentlige læse-endpoints, skrivebeskyttet adminoversigt og en idempotent WP-CLI-import med dry-run. Import med skrivning afbrydes, hvis analysen ikke finder præcis 206 sikre legacy-ratings. Composer-validering, domænetests, PHP-syntaks, WordPress Coding Standards og Git whitespace-kontrol består. Pluginet er endnu ikke installeret eller integrationstestet på CMS'et.
 
+**Integrationstest 24.11.2026:** Version `0.1.0` er installeret og aktiv på CMS'et, og databaseskema version 1 er oprettet. Endpoints til år og skaltyper virker. Liste-endpointet afslørede en fejl, hvor WordPress REST API sendte requestobjektet som ekstra argument til `sanitize_title` for et tomt standardfilter. Rettelsen er implementeret lokalt i version `0.1.1` med en regressionstest. CMS'et skal opdateres til `0.1.1`, før API-kontrollen fortsætter. WPVibes WP-CLI-emulator tillader ikke projektspecifikke kommandoer, så importerens dry-run kan ikke køres gennem denne forbindelse.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 

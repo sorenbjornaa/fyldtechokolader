@@ -45,7 +45,7 @@ final class ChocolateController {
 				'args'                => array(
 					'slug' => array(
 						'required'          => true,
-						'sanitize_callback' => 'sanitize_title',
+						'sanitize_callback' => static fn ( $value ): string => sanitize_title( (string) $value ),
 					),
 				),
 			)
@@ -129,7 +129,7 @@ final class ChocolateController {
 			),
 			'skaltype' => array(
 				'default'           => '',
-				'sanitize_callback' => 'sanitize_title',
+				'sanitize_callback' => static fn ( $value ): string => sanitize_title( (string) $value ),
 			),
 			'orderby'  => array(
 				'default'           => 'date',

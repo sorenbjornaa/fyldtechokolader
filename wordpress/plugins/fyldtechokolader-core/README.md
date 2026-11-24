@@ -4,7 +4,7 @@ Projektspecifikt WordPress-plugin til datamodel, individuelle ratings, kontrolle
 
 ## Status
 
-Version `0.1.0` er en lokal første implementering. Den er ikke installeret på CMS'et.
+Version `0.1.1` retter WordPress REST API's håndtering af tomme slugfiltre efter den første integrationstest på CMS'et.
 
 Pluginet indeholder:
 
