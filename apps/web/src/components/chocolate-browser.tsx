@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChocolateCard } from "@/components/chocolate-card";
 import type { ChocolateSummary } from "@/types/chocolate";
 
@@ -9,6 +9,7 @@ type ChocolateBrowserProps = {
 };
 
 export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [year, setYear] = useState("alle");
   const [shell, setShell] = useState("alle");
@@ -54,6 +55,52 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
       );
     });
   }, [chocolates, query, shell, year]);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) {
+      return;
+    }
+
+    const desktop = window.matchMedia("(min-width: 1200px)");
+    const links = Array.from(
+      grid.querySelectorAll<HTMLElement>(".chocolate-card__link"),
+    );
+
+    const resizeCard = (link: HTMLElement) => {
+      const card = link.closest<HTMLElement>(".chocolate-card");
+      if (!card) {
+        return;
+      }
+
+      if (!desktop.matches) {
+        card.style.removeProperty("grid-row-end");
+        return;
+      }
+
+      const styles = window.getComputedStyle(grid);
+      const rowHeight = Number.parseFloat(styles.gridAutoRows);
+      const rowGap = Number.parseFloat(styles.rowGap);
+      const height = link.getBoundingClientRect().height;
+      const span = Math.ceil((height + rowGap) / (rowHeight + rowGap));
+
+      card.style.gridRowEnd = `span ${span}`;
+    };
+
+    const updateGrid = () => links.forEach(resizeCard);
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach((entry) => resizeCard(entry.target as HTMLElement));
+    });
+
+    links.forEach((link) => observer.observe(link));
+    desktop.addEventListener("change", updateGrid);
+    updateGrid();
+
+    return () => {
+      observer.disconnect();
+      desktop.removeEventListener("change", updateGrid);
+    };
+  }, [filtered]);
 
   return (
     <section className="catalogue" id="chokolader" aria-labelledby="catalogue-title">
@@ -124,7 +171,10 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
       </div>
 
       {filtered.length > 0 ? (
-        <div className="chocolate-grid page-shell">
+        <div
+          className="chocolate-grid chocolate-grid--masonry page-shell"
+          ref={gridRef}
+        >
           {filtered.map((chocolate, index) => (
             <ChocolateCard
               chocolate={chocolate}

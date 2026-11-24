@@ -73,5 +73,7 @@
 
 **Ny rating-slider implementeret 24.11.2026:** Figma-varianten `35:1079` er omsat til en tilgængelig React-range-slider på chokoladedetaljen. Den bruger skala 1–7, starter ved midterværdien 4, følger drag og tastaturinput med dynamisk guld/brun gradient samt hvide stjerner og inaktive prikker og skriver først ved “Gem bedømmelse”. Next.js-routehandleren opretter en anonym HttpOnly-browseridentitet, validerer same-origin og score, HMAC-signerer requesten til WordPress og invaliderer chokoladecachen efter succes. Lokal UI-, fejltilstands-, lint-, TypeScript- og buildkontrol består. Den delte `FYLDTECHOKOLADER_API_SECRET` mangler fortsat i WordPress og Vercel; den skal konfigureres før gemmeflowet kan aktiveres og end-to-end-testes mod CMS'et.
 
+**Masonry-inspireret kortgrid 24.11.2026:** Desktop-forskydningen på hvert andet kort er fjernet. Samlingsgridet bruger ved mindst 1200 px et 12-kolonners mønster med varierede kortbredder og billedformater samt dynamisk beregnede række-spans, så kortene pakker tættere under kortere kolonner. De første tre kort starter på samme linje. Mobil og tablet beholder de enkle én- og tokolonnelayouts, og filtrering genberegner layoutet uden inline-rækker på mindre skærme.
+
 Detaljerede audits og datamodel findes i det lokale Dropbox-projekt under `002 Website`.
 

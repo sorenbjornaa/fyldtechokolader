@@ -22,7 +22,7 @@ export function ChocolateCard({ chocolate, priority = false }: ChocolateCardProp
               src={chocolate.image.src}
               alt={chocolate.image.alt || chocolate.title}
               fill
-              sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 42vw"
               className="chocolate-card__image"
               priority={priority}
             />
