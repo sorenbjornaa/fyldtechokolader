@@ -20,6 +20,12 @@ Pluginet indeholder:
 
 Pluginet sletter ikke data ved deaktivering eller afinstallation.
 
+## Forside
+
+Fra version `0.1.5` ligger ACF-gruppen **Forside – indhold** på siden valgt under **Indstillinger → Læsning**. Her kan redaktøren styre heroens overlinje, H1, beskrivelse, knaptekst og samlingsbillede samt introduktionens tekst. Samlingsbilledet vælges i mediebiblioteket, hvor alt-teksten også redigeres. Både billedet og knappen linker til `#chokolader`.
+
+Frontendens standardindhold vises, hvis et felt står tomt. Gem ændringer med **Opdater**. Next.js bruger minutcache til forsideindholdet, så ændringer kan vises med en kort forsinkelse.
+
 ## Indholdsmigrering
 
 Under **Værktøjer → Chokoladeindhold** kan en administrator først køre en skrivebeskyttet dry-run for alle 28 chokolader. Den viser legacy-dato, nyt produktionsår og -dato samt gammel og ny skaltype pr. post.
@@ -37,6 +43,7 @@ GET  /chokolader/{slug}/rating
 POST /chokolader/{slug}/rating
 GET  /skaltype
 GET  /aar
+GET  /forside
 ```
 
 `POST /rating` kræver JSON med `score` og `voterToken`. Next.js-serveren signerer requesten med disse headers:

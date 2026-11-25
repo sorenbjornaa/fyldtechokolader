@@ -13,7 +13,7 @@ export function apiUrl(path: string): string {
   return `${baseUrl}${path}`;
 }
 
-async function fetchApi<T>(path: string): Promise<T> {
+async function fetchApi<T>(path: string, notFound?: T): Promise<T> {
   const maxAttempts = 3;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
@@ -23,6 +23,10 @@ async function fetchApi<T>(path: string): Promise<T> {
 
     if (response.ok) {
       return (await response.json()) as T;
+    }
+
+    if (response.status === 404 && notFound !== undefined) {
+      return notFound;
     }
 
     const canRetry = response.status === 429 || response.status >= 500;
@@ -38,6 +42,27 @@ async function fetchApi<T>(path: string): Promise<T> {
   }
 
   throw new Error("WordPress API kunne ikke hentes.");
+}
+
+type FrontPageCopy = {
+  eyebrow: string;
+  heading: string;
+  description: string;
+};
+
+type FrontPage = {
+  hero: FrontPageCopy & {
+    buttonLabel: string;
+    image: { src: string; alt: string } | null;
+  };
+  introduction: FrontPageCopy;
+};
+
+export async function getFrontPage(): Promise<FrontPage | null> {
+  "use cache";
+  cacheLife("minutes");
+
+  return fetchApi<FrontPage | null>("/forside", null);
 }
 
 export async function getChocolates(): Promise<Chocolate[]> {

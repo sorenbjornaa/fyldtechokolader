@@ -18,6 +18,7 @@ use Fyldtechokolader\Core\Migration\ContentMigrator;
 use Fyldtechokolader\Core\Ratings\RatingRepository;
 use Fyldtechokolader\Core\Ratings\RatingService;
 use Fyldtechokolader\Core\Rest\ChocolateController;
+use Fyldtechokolader\Core\Rest\FrontPageController;
 use Fyldtechokolader\Core\Rest\RatingController;
 use Fyldtechokolader\Core\Security\RequestAuthenticator;
 
@@ -36,6 +37,8 @@ final class Plugin {
 
 		add_action( 'init', array( $content_registrar, 'register' ), 20 );
 		add_action( 'acf/init', array( $content_registrar, 'register_acf_fields' ) );
+		add_action( 'acf/init', array( $content_registrar, 'register_front_page_fields' ) );
+		add_action( 'rest_api_init', array( new FrontPageController(), 'register_routes' ) );
 		add_action(
 			'rest_api_init',
 			static function () use ( $chocolates, $rating_service ): void {

@@ -77,6 +77,58 @@ final class ContentRegistrar {
 		);
 	}
 
+	public function register_front_page_fields(): void {
+		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+			return;
+		}
+
+		$fields = array();
+		foreach ( array(
+			'hero_eyebrow'             => array( 'Hero – overlinje', 'text' ),
+			'hero_heading'             => array( 'Hero – H1-overskrift', 'text' ),
+			'hero_description'         => array( 'Hero – beskrivelse', 'textarea' ),
+			'hero_button_label'        => array( 'Hero – knaptekst', 'text' ),
+			'introduction_eyebrow'     => array( 'Introduktion – overlinje', 'text' ),
+			'introduction_heading'     => array( 'Introduktion – overskrift', 'text' ),
+			'introduction_description' => array( 'Introduktion – brødtekst', 'textarea' ),
+		) as $name => list( $label, $type ) ) {
+			$fields[] = array(
+				'key'   => 'field_fyldtechokolader_' . $name,
+				'label' => $label,
+				'name'  => 'ft_' . $name,
+				'type'  => $type,
+			);
+		}
+
+		$fields[] = array(
+			'key'           => 'field_fyldtechokolader_hero_image',
+			'label'         => 'Hero – samlingsbillede',
+			'name'          => 'ft_hero_image',
+			'type'          => 'image',
+			'return_format' => 'id',
+			'instructions'  => 'Vælg ét billede af hele samlingen. Motivet beskæres fra midten på smalle skærme.',
+		);
+
+		acf_add_local_field_group(
+			array(
+				'key'      => 'group_fyldtechokolader_front_page',
+				'title'    => 'Forside – indhold',
+				'fields'   => $fields,
+				'location' => array(
+					array(
+						array(
+							'param'    => 'page_type',
+							'operator' => '==',
+							'value'    => 'front_page',
+						),
+					),
+				),
+				'position' => 'normal',
+				'active'   => true,
+			)
+		);
+	}
+
 	private function register_post_type(): void {
 		if ( post_type_exists( self::POST_TYPE ) ) {
 			return;

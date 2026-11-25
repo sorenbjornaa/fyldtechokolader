@@ -1,17 +1,21 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ChocolateBrowser } from "@/components/chocolate-browser";
-import { RatingDisplay } from "@/components/rating-display";
 import { SiteHeader } from "@/components/site-header";
-import { getChocolates } from "@/lib/api";
+import { getChocolates, getFrontPage } from "@/lib/api";
 
 export default async function Home() {
-  const chocolates = await getChocolates();
-  const hero = chocolates[0];
-
-  if (!hero) {
-    throw new Error("Der blev ikke fundet nogen chokolader.");
-  }
+  const [chocolates, frontPage] = await Promise.all([
+    getChocolates(),
+    getFrontPage(),
+  ]);
+  const latest = chocolates[0];
+  const hero = frontPage?.hero;
+  const introduction = frontPage?.introduction;
+  const image = hero?.image ?? latest?.image;
+  const buttonLabel = hero?.buttonLabel || "Se alle chokolader";
+  const latestDescription = latest?.description !== latest?.title
+    ? latest?.description
+    : undefined;
 
   const summaries = chocolates.map((chocolate) => ({
     id: chocolate.id,
@@ -31,60 +35,49 @@ export default async function Home() {
       <SiteHeader overlay />
       <main>
         <section className="hero">
-          {hero.image ? (
-            <Image
-              src={hero.image.src}
-              alt={hero.image.alt || hero.title}
-              fill
-              priority
-              sizes="100vw"
-              className="hero__image"
-            />
+          {image ? (
+            <a className="hero__media" href="#chokolader" aria-label={buttonLabel}>
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                fetchPriority="high"
+                loading="eager"
+                sizes="100vw"
+                className="hero__image"
+              />
+            </a>
           ) : null}
           <div className="hero__veil" aria-hidden="true" />
           <div className="hero__content page-shell">
             <p className="eyebrow hero__eyebrow">
-              Seneste fra {hero.productionYear ?? "samlingen"}
+              {hero?.eyebrow || `Seneste fra ${latest?.productionYear ?? "samlingen"}`}
             </p>
-            <h1>{hero.title}</h1>
+            <h1>{hero?.heading || latest?.title || "Fyldte chokolader"}</h1>
             <p className="hero__description">
-              {hero.description && hero.description !== hero.title
-                ? hero.description
-                : "En samling af håndlavede fyldte chokolader, smage og opskrifter."}
+              {hero?.description || latestDescription || "En samling af håndlavede fyldte chokolader, smage og opskrifter."}
             </p>
-            <RatingDisplay
-              average={hero.rating.average}
-              count={hero.rating.count}
-            />
-            <Link className="button button--primary" href={`/chokolade/${hero.slug}`}>
-              Se chokoladen
+            <a className="button button--primary" href="#chokolader">
+              {buttonLabel}
               <svg
                 className="button__icon"
                 aria-hidden="true"
                 viewBox="0 0 24 24"
               >
-                <path d="M7 17 17 7M7 7h10v10" />
+                <path d="M12 5v14m-6-6 6 6 6-6" />
               </svg>
-            </Link>
+            </a>
           </div>
-          <a className="hero__scroll" href="#chokolader">
-            Udforsk samlingen
-            <span aria-hidden="true">↓</span>
-          </a>
         </section>
 
         <section className="introduction page-shell reveal-on-scroll">
-          <p className="eyebrow">Smagen først</p>
+          <p className="eyebrow">{introduction?.eyebrow || "Smagen først"}</p>
           <div className="introduction__grid">
             <h2>
-              Små øjeblikke,
-              <br />
-              gemt i chokolade.
+              {introduction?.heading || <>Små øjeblikke,<br />gemt i chokolade.</>}
             </h2>
             <p>
-              Her samler jeg årets fyldte chokolader – fra den første idé til
-              den færdige smag. Se opskrifterne, find dine favoritter, og følg
-              med, når nye kombinationer kommer til.
+              {introduction?.description || "Her samler jeg årets fyldte chokolader – fra den første idé til den færdige smag. Se opskrifterne, find dine favoritter, og følg med, når nye kombinationer kommer til."}
             </p>
           </div>
         </section>
