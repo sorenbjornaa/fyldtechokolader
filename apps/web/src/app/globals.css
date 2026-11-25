@@ -670,6 +670,7 @@ h3 {
 .select-field select {
   width: 100%;
   min-height: 56px;
+  font-size: 1rem;
   appearance: none;
   -webkit-appearance: none;
   border: 0;
@@ -739,14 +740,19 @@ h3 {
   position: absolute;
   top: 14px;
   left: 14px;
-  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 16px;
   border-radius: var(--ft-radius-full, 999px);
   background: var(--ft-color-action-primary);
-  color: var(--ft-color-action-ink);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--ft-color-text-inverse, #3c2421);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  opacity: 0.9;
 }
 
 .chocolate-card__content {
