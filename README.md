@@ -35,5 +35,5 @@ Hvis arbejdsområdet indeholder flere opgaver, kan du stage det ønskede i Git e
 bash scripts/commit.sh "Opdatér filtre" --patch apps/web/src/app/globals.css -- apps/web/src/components/chocolate-browser.tsx
 ```
 
-Scriptet opretter kun et lokalt commit. Push til GitHub er et separat trin.
+Efter det lokale commit spørger scriptet, om du vil pushe grenen til GitHub. Svar `j` for at sende committet og eventuelle tidligere lokale commits på grenen. Tryk Enter for at beholde dem lokalt. Push til `main` kan starte en produktionsudrulning på Vercel.
 

@@ -138,3 +138,33 @@ if [[ $(git write-tree) != "$staged_tree" ]]; then
 fi
 
 git commit -m "$message"
+
+if ! branch=$(git symbolic-ref --quiet --short HEAD); then
+  printf '%s\n' 'Commit gemt lokalt. Vælg en Git-gren for at kunne pushe.'
+  exit 0
+fi
+
+if ! git remote get-url --push origin >/dev/null 2>&1; then
+  printf '%s\n' 'Commit gemt lokalt. Der er ingen Git-remote med navnet origin.'
+  exit 0
+fi
+
+commit=$(git rev-parse HEAD)
+printf '\nPush sender også eventuelle tidligere lokale commits på %s.\n' "$branch"
+if [[ $branch == main ]]; then
+  printf '%s\n' 'Push til main kan starte en produktionsudrulning på Vercel.'
+fi
+
+if read -r -p "Push til GitHub (origin/$branch)? [j/N] " answer; then
+  case $answer in
+    j|J|ja|Ja)
+      if ! git push origin "$commit:refs/heads/$branch"; then
+        printf '%s\n' 'Push mislykkedes. Committet er gemt lokalt.' >&2
+        exit 1
+      fi
+      exit 0
+      ;;
+  esac
+fi
+
+printf '%s\n' 'Commit gemt lokalt.'

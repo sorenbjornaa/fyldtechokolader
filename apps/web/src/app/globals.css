@@ -103,7 +103,6 @@ h3 {
 }
 
 .eyebrow {
-  margin-bottom: var(--ft-spacing-3);
   color: var(--ft-color-action-primary);
   font-size: 0.72rem;
   font-weight: 700;
@@ -214,6 +213,9 @@ h3 {
   padding-bottom: 96px;
   animation: hero-copy-in 800ms 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+.hero__content p {
+  margin-blockend: var(--ft-spacing-5);
+}
 
 .hero h1 {
   max-width: 15ch;
@@ -221,7 +223,7 @@ h3 {
   overflow-wrap: break-word;
   font-size: clamp(2.25rem, 9vw, 8rem);
   hyphens: auto;
-  line-height: 0.87;
+  line-height: 1.1;
   text-wrap: balance;
 }
 
@@ -420,7 +422,8 @@ h3 {
   display: grid;
   width: 34px;
   height: 34px;
-  border: 1px solid color-mix(in srgb, var(--ft-primitive-white) 42%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--ft-primitive-white) 42%, transparent);
   border-radius: 50%;
   background: color-mix(in srgb, var(--ft-color-surface-page) 72%, transparent);
   color: var(--ft-primitive-white);
