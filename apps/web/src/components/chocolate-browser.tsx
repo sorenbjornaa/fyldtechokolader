@@ -189,8 +189,8 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
       </div>
 
       <div className="filters page-shell" aria-label="Filtrer chokolader">
-        <label className="search-field">
-          <span className="sr-only">Søg i chokolader</span>
+        <div className="search-field">
+          <label className="sr-only" htmlFor="chocolate-search">Søg i chokolader</label>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
             <path d="m16.5 16.5 4 4" />
@@ -203,8 +203,22 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
             placeholder="Søg efter smag eller navn"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Escape" && query) {
+                event.preventDefault();
+                clearFilter("search");
+              }
+            }}
           />
-        </label>
+          {query && (
+            <button
+              type="button"
+              className="search-field__clear"
+              aria-label="Ryd søgefelt"
+              onClick={() => clearFilter("search")}
+            />
+          )}
+        </div>
 
         <label className="select-field">
           <span>Chokolade</span>

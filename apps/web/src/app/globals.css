@@ -604,6 +604,7 @@ h3 {
 
 .search-field input {
   width: 100%;
+  min-width: 0;
   height: 58px;
   border: 0;
   outline: 0;
@@ -614,6 +615,36 @@ h3 {
 
 .search-field input::placeholder {
   color: color-mix(in srgb, var(--ft-color-text-secondary) 68%, transparent);
+}
+
+.search-field input::-webkit-search-cancel-button {
+  appearance: none;
+  display: none;
+}
+
+.search-field:has(input:focus-visible) {
+  border-color: var(--ft-color-action-primary);
+}
+
+.search-field__clear {
+  display: grid;
+  flex: 0 0 var(--ft-touch-min);
+  min-height: var(--ft-touch-min);
+  place-items: center;
+  color: var(--ft-color-action-primary);
+  cursor: pointer;
+}
+
+.search-field__clear::after {
+  width: var(--ft-spacing-4);
+  height: var(--ft-spacing-4);
+  background: currentColor;
+  mask: url("/filter-chip-remove.svg") center / contain no-repeat;
+  content: "";
+}
+
+.search-field__clear:hover {
+  color: var(--ft-color-action-primary-hover);
 }
 
 .select-field {
