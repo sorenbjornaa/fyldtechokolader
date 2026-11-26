@@ -15,10 +15,12 @@
   --ft-primitive-white: #ffffff;
   --ft-primitive-black: #000000;
   --ft-primitive-green-500: #79a86b;
+  --ft-primitive-red-300: #f0b1a2;
   --ft-primitive-red-500: #c85c5c;
   --ft-primitive-overlay-black-64: #000000a3;
+  --ft-primitive-overlay-cream-18: color-mix(in srgb, var(--ft-primitive-cream-200) 18%, transparent);
 
-  /* Semantic colors. See docs/DESIGN_TOKENS.md for the three name collisions. */
+  /* Semantic colors */
   --ft-color-surface-page: var(--ft-primitive-chocolate-900);
   --ft-color-surface-subtle: var(--ft-primitive-chocolate-800);
   --ft-color-surface-elevated: var(--ft-primitive-chocolate-700);
@@ -32,10 +34,12 @@
   --ft-color-rating-inactive: var(--ft-primitive-rust-400);
   --ft-color-feedback-success: var(--ft-primitive-green-500);
   --ft-color-feedback-error: var(--ft-primitive-red-500);
+  --ft-color-feedback-error-text: var(--ft-primitive-red-300);
   --ft-color-overlay-image: var(--ft-primitive-overlay-black-64);
   --ft-color-border-action: var(--ft-primitive-gold-400);
   --ft-color-rating-inverse: var(--ft-primitive-cream-100);
-  --ft-color-text-subtile: var(--ft-primitive-chocolate-800);
+  --ft-color-text-subtle: var(--ft-primitive-chocolate-800);
+  --ft-color-line: var(--ft-primitive-overlay-cream-18);
 
   /* Spacing, shape and layout */
   --ft-spacing-0: 0px;
@@ -79,8 +83,6 @@
   --ft-line-height-meta: 18px;
 
   /* Web-only values */
-  --ft-color-line: color-mix(in srgb, var(--ft-color-text-primary) 18%, transparent);
-  --ft-color-feedback-error-text: #f0b1a2;
   --ft-header-height: 74px;
 }
 
