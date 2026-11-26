@@ -1,0 +1,116 @@
+/* Figma Design system. CSS-navne og værdier følger variablernes Web-syntaks. */
+:root {
+  /* Palette */
+  --ft-primitive-chocolate-950: #160e0d;
+  --ft-primitive-chocolate-900: #271614;
+  --ft-primitive-chocolate-800: #3c2421;
+  --ft-primitive-chocolate-700: #593530;
+  --ft-primitive-chocolate-600: #75462e;
+  --ft-primitive-cream-100: #f7f1e6;
+  --ft-primitive-cream-200: #e7ddc9;
+  --ft-primitive-cream-300: #d2c4ac;
+  --ft-primitive-gold-400: #e3c96a;
+  --ft-primitive-gold-500: #ceb261;
+  --ft-primitive-rust-400: #c59b85;
+  --ft-primitive-white: #ffffff;
+  --ft-primitive-black: #000000;
+  --ft-primitive-green-500: #79a86b;
+  --ft-primitive-red-500: #c85c5c;
+  --ft-primitive-overlay-black-64: #000000a3;
+
+  /* Semantic colors. See docs/DESIGN_TOKENS.md for the three name collisions. */
+  --ft-color-surface-page: var(--ft-primitive-chocolate-900);
+  --ft-color-surface-subtle: var(--ft-primitive-chocolate-800);
+  --ft-color-surface-elevated: var(--ft-primitive-chocolate-700);
+  --ft-color-text-primary: var(--ft-primitive-cream-200);
+  --ft-color-text-secondary: var(--ft-primitive-cream-300);
+  --ft-color-text-inverse: var(--ft-primitive-chocolate-950);
+  --ft-color-action-primary: var(--ft-primitive-gold-500);
+  --ft-color-action-primary-hover: var(--ft-primitive-gold-400);
+  --ft-color-border-subtle: var(--ft-primitive-chocolate-600);
+  --ft-color-rating-active: var(--ft-primitive-gold-500);
+  --ft-color-rating-inactive: var(--ft-primitive-rust-400);
+  --ft-color-feedback-success: var(--ft-primitive-green-500);
+  --ft-color-feedback-error: var(--ft-primitive-red-500);
+  --ft-color-overlay-image: var(--ft-primitive-overlay-black-64);
+  --ft-color-border-action: var(--ft-primitive-gold-400);
+  --ft-color-rating-inverse: var(--ft-primitive-cream-100);
+  --ft-color-text-subtile: var(--ft-primitive-chocolate-800);
+
+  /* Spacing, shape and layout */
+  --ft-spacing-0: 0px;
+  --ft-spacing-1: 4px;
+  --ft-spacing-2: 8px;
+  --ft-spacing-3: 12px;
+  --ft-spacing-4: 16px;
+  --ft-spacing-5: 20px;
+  --ft-spacing-6: 24px;
+  --ft-spacing-8: 32px;
+  --ft-spacing-10: 40px;
+  --ft-spacing-12: 48px;
+  --ft-spacing-16: 64px;
+  --ft-radius-sm: 4px;
+  --ft-radius-md: 8px;
+  --ft-radius-lg: 16px;
+  --ft-radius-xl: 24px;
+  --ft-radius-full: 999px;
+  --ft-touch-min: 44px;
+  --ft-container-padding-inline: 16px;
+  --ft-container-max-width: 390px;
+  --ft-section-space: 48px;
+  --ft-grid-columns: 1;
+
+  /* Typography, with Adobe Fonts family names and web fallbacks */
+  --ft-font-family-display: "bely-display", "Iowan Old Style", Georgia, serif;
+  --ft-font-family-body: "bd-supper", "Avenir Next", Avenir, sans-serif;
+  --ft-font-size-display: 40px;
+  --ft-font-size-h1: 32px;
+  --ft-font-size-h2: 26px;
+  --ft-font-size-h3: 22px;
+  --ft-font-size-body: 16px;
+  --ft-font-size-label: 14px;
+  --ft-font-size-meta: 13px;
+  --ft-line-height-display: 44px;
+  --ft-line-height-h1: 38px;
+  --ft-line-height-h2: 32px;
+  --ft-line-height-h3: 28px;
+  --ft-line-height-body: 24px;
+  --ft-line-height-label: 20px;
+  --ft-line-height-meta: 18px;
+
+  /* Web-only values */
+  --ft-color-line: color-mix(in srgb, var(--ft-color-text-primary) 18%, transparent);
+  --ft-color-feedback-error-text: #f0b1a2;
+  --ft-header-height: 74px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --ft-container-padding-inline: 32px;
+    --ft-container-max-width: 768px;
+    --ft-section-space: 64px;
+    --ft-grid-columns: 2;
+    --ft-header-height: 86px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --ft-container-padding-inline: 80px;
+    --ft-container-max-width: 1280px;
+    --ft-section-space: 80px;
+    --ft-grid-columns: 3;
+    --ft-font-size-display: 64px;
+    --ft-font-size-h1: 48px;
+    --ft-font-size-h2: 36px;
+    --ft-font-size-h3: 28px;
+    --ft-font-size-body: 18px;
+    --ft-font-size-meta: 14px;
+    --ft-line-height-display: 68px;
+    --ft-line-height-h1: 56px;
+    --ft-line-height-h2: 44px;
+    --ft-line-height-h3: 36px;
+    --ft-line-height-body: 28px;
+    --ft-line-height-meta: 20px;
+  }
+}

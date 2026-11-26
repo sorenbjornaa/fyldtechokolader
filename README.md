@@ -19,3 +19,21 @@ docs/                                      Teknisk projektkontekst
 
 Se [docs/PROJECT_CONTEXT.md](docs/PROJECT_CONTEXT.md), før udviklingen begynder.
 
+## Lav et lokalt commit
+
+Når alle dine lokale ændringer hører til samme opgave, kan du bruge én kommando:
+
+```sh
+bash scripts/commit.sh "Beskriv ændringen" --all
+```
+
+Scriptet viser, hvilke filer der kommer med. Svar `j` for at fortsætte eller `v` for at se hele diffen. Det kører lint og produktionsbuild ved ændringer i frontend og PHP-tests og syntakskontrol ved ændringer i pluginet. Kontrollerne bruger de valgte filversioner. Et frontendbuild kræver adgang til projektets WordPress-API.
+
+Hvis arbejdsområdet indeholder flere opgaver, kan du stage det ønskede i Git eller VS Code og køre kommandoen uden `--all`. Du kan også vælge hele filer efter `--` eller vælge enkelte ændringer med `--patch FIL`.
+
+```sh
+bash scripts/commit.sh "Opdatér filtre" --patch apps/web/src/app/globals.css -- apps/web/src/components/chocolate-browser.tsx
+```
+
+Scriptet opretter kun et lokalt commit. Push til GitHub er et separat trin.
+

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChocolateCard } from "@/components/chocolate-card";
 import type { ChocolateSummary } from "@/types/chocolate";
@@ -8,34 +9,46 @@ type ChocolateBrowserProps = {
   chocolates: ChocolateSummary[];
 };
 
+const filterList = new Intl.ListFormat("da", { type: "conjunction" });
+type FilterId = "search" | "year" | "shell";
+
 export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const yearRef = useRef<HTMLSelectElement>(null);
+  const shellRef = useRef<HTMLSelectElement>(null);
   const [query, setQuery] = useState("");
   const [year, setYear] = useState("alle");
   const [shell, setShell] = useState("alle");
+  const searchTerm = query.trim();
 
   const years = useMemo(
     () =>
       Array.from(
-        new Set(chocolates.map((chocolate) => chocolate.productionYear).filter(Boolean)),
+        new Set(
+          chocolates
+            .filter((chocolate) => shell === "alle" || chocolate.shellType?.slug === shell)
+            .map((chocolate) => chocolate.productionYear)
+            .filter(Boolean),
+        ),
       ).sort((a, b) => Number(b) - Number(a)),
-    [chocolates],
+    [chocolates, shell],
   );
 
   const shells = useMemo(() => {
     const values = new Map<string, string>();
     chocolates.forEach((chocolate) => {
-      if (chocolate.shellType) {
+      if (chocolate.shellType && (year === "alle" || String(chocolate.productionYear) === year)) {
         values.set(chocolate.shellType.slug, chocolate.shellType.name);
       }
     });
     return Array.from(values.entries()).sort((a, b) =>
       a[1].localeCompare(b[1], "da"),
     );
-  }, [chocolates]);
+  }, [chocolates, year]);
 
   const filtered = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase("da-DK");
+    const normalizedQuery = searchTerm.toLocaleLowerCase("da-DK");
 
     return chocolates.filter((chocolate) => {
       const searchable = [
@@ -54,7 +67,68 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
         (shell === "alle" || chocolate.shellType?.slug === shell)
       );
     });
-  }, [chocolates, query, shell, year]);
+  }, [chocolates, searchTerm, shell, year]);
+
+  const activeFilters: {
+    id: FilterId;
+    label: string;
+    summary: string;
+    clearLabel: string;
+  }[] = [];
+
+  if (searchTerm) {
+    activeFilters.push({
+      id: "search",
+      label: `Søgning: “${searchTerm}”`,
+      summary: `søgning efter “${searchTerm}”`,
+      clearLabel: "Ryd søgning",
+    });
+  }
+
+  if (year !== "alle") {
+    activeFilters.push({
+      id: "year",
+      label: `Årgang ${year}`,
+      summary: `årgang ${year}`,
+      clearLabel: "Fjern årgangsfilter",
+    });
+  }
+
+  const shellName = shells.find(([slug]) => slug === shell)?.[1];
+  if (shellName) {
+    activeFilters.push({
+      id: "shell",
+      label: shellName,
+      summary: `chokoladetype ${shellName}`,
+      clearLabel: "Fjern chokoladetypefilter",
+    });
+  }
+
+  const [singleFilter] = activeFilters;
+  const hasMultipleFilters = activeFilters.length > 1;
+  const clearFilter = (id: FilterId) => {
+    switch (id) {
+      case "search":
+        setQuery("");
+        searchRef.current?.focus();
+        break;
+      case "year":
+        setYear("alle");
+        yearRef.current?.focus();
+        break;
+      case "shell":
+        setShell("alle");
+        shellRef.current?.focus();
+        break;
+    }
+  };
+
+  const resetFilters = () => {
+    setQuery("");
+    setYear("alle");
+    setShell("alle");
+    searchRef.current?.focus();
+  };
 
   useEffect(() => {
     const grid = gridRef.current;
@@ -122,6 +196,7 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
             <path d="m16.5 16.5 4 4" />
           </svg>
           <input
+            ref={searchRef}
             id="chocolate-search"
             name="q"
             type="search"
@@ -134,6 +209,7 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
         <label className="select-field">
           <span>Chokolade</span>
           <select
+            ref={shellRef}
             id="chocolate-shell"
             name="shell"
             value={shell}
@@ -151,6 +227,7 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
         <label className="select-field">
           <span>Årgang</span>
           <select
+            ref={yearRef}
             id="chocolate-year"
             name="year"
             value={year}
@@ -186,7 +263,41 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
       ) : (
         <div className="empty-state page-shell">
           <h3>Ingen chokolader matcher</h3>
-          <p>Prøv et andet søgeord eller nulstil et af filtrene.</p>
+          {singleFilter ? (
+            <>
+              <p>
+                Ingen resultater for {filterList.format(activeFilters.map(({ summary }) => summary))}.
+              </p>
+              {hasMultipleFilters && (
+                <ul className="empty-state__chips" aria-label="Aktive valg">
+                  {activeFilters.map((filter) => (
+                    <li key={filter.id}>
+                      <button
+                        type="button"
+                        className={filter.id === "search" ? "filter-chip filter-chip--search" : "filter-chip"}
+                        aria-label={filter.id === "search" ? `Ryd ${filter.summary}` : `Fjern ${filter.label}`}
+                        onClick={() => clearFilter(filter.id)}
+                      >
+                        <span className="filter-chip__surface">
+                          <span className="filter-chip__label">{filter.label}</span>
+                          <Image className="filter-chip__remove" src="/filter-chip-remove.svg" alt="" width={12} height={12} />
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <button
+                type="button"
+                className="button button--secondary"
+                onClick={hasMultipleFilters ? resetFilters : () => clearFilter(singleFilter.id)}
+              >
+                {hasMultipleFilters ? "Nulstil søgning og filtre" : singleFilter.clearLabel}
+              </button>
+            </>
+          ) : (
+            <p>Der er endnu ingen chokolader i samlingen.</p>
+          )}
         </div>
       )}
     </section>

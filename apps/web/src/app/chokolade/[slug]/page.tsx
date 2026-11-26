@@ -205,13 +205,6 @@ async function ChocolatePageContent({ params }: ChocolatePageProps) {
           </section>
         ) : null}
       </main>
-      <footer className="site-footer page-shell">
-        <div className="brand brand--footer">
-          <span>Fyldte</span>
-          <strong>chokolader</strong>
-        </div>
-        <p>Et privat chokoladeprojekt af Søren Bjørnå.</p>
-      </footer>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
     </>
   );

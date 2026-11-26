@@ -84,13 +84,6 @@ export default async function Home() {
 
         <ChocolateBrowser chocolates={summaries} />
       </main>
-      <footer className="site-footer page-shell">
-        <div className="brand brand--footer">
-          <span>Fyldte</span>
-          <strong>chokolader</strong>
-        </div>
-        <p>Et privat chokoladeprojekt af Søren Bjørnå.</p>
-      </footer>
     </>
   );
 }
