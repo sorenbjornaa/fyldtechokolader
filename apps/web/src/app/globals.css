@@ -282,17 +282,11 @@ h3 {
 
 .rating__stars {
   display: inline-flex;
-  gap: 2px;
+  gap: var(--ft-spacing-2);
 }
 
-.rating__stars svg {
-  width: 17px;
-  height: 17px;
-  fill: var(--ft-color-rating-inactive);
-}
-
-.rating__stars svg.is-active {
-  fill: var(--ft-color-rating-active);
+.rating__star {
+  flex: none;
 }
 
 .rating__number {
@@ -314,11 +308,6 @@ h3 {
 
 .rating--compact {
   gap: var(--ft-spacing-2);
-}
-
-.rating--compact .rating__stars svg {
-  width: 14px;
-  height: 14px;
 }
 
 .rating-form {
