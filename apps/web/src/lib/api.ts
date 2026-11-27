@@ -1,5 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
-import type { Chocolate, PageSeo } from "@/types/chocolate";
+import type { Chocolate, ChocolateSummary, PageSeo } from "@/types/chocolate";
 
 const defaultApiUrl =
   "https://cms.fyldtechokolader.dk/wp-json/fyldtechokolader/v1";
@@ -60,6 +60,26 @@ type FrontPage = {
 };
 
 type PrivacyPage = { title: string; contentHtml: string; seo: PageSeo };
+
+type YearPage = FrontPageCopy & {
+  slug: string;
+  year: number;
+  image: { src: string; alt: string } | null;
+  seo: PageSeo;
+};
+
+export async function getYearPages(): Promise<YearPage[]> {
+  "use cache";
+  cacheLife("minutes");
+
+  return fetchApi<YearPage[]>("/aargange", []);
+}
+
+export function chocolateSummaries(chocolates: Chocolate[]): ChocolateSummary[] {
+  return chocolates.map(({ id, slug, title, description, productionYear, productionDate, shellType, badge, image, rating }) => ({
+    id, slug, title, description, productionYear, productionDate, shellType, badge, image, rating,
+  }));
+}
 
 export async function getPrivacyPage(): Promise<PrivacyPage | null> {
   "use cache";

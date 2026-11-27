@@ -35,6 +35,12 @@ npx tsc --noEmit
 npm run build
 ```
 
+## Årgangssider
+
+Fra Core 0.1.7 kan du oprette en WordPress-side på øverste niveau eller genbruge en eksisterende. Udfyld **Produktionsår** under **Årgangsside**, og redigér overlinje, H1, introduktion og topbillede. Hvis H1 eller topbillede er tomt, bruger websitet sidens titel eller designets samlingsfoto. Lad **Produktionsår** stå tomt på almindelige sider.
+
+Ved publicering bruger websitet sidens WordPress-slug som adresse og viser de chokolader, der har samme produktionsår. Menuen linker til den publicerede årgangsside med det højeste årstal. De offentlige sider kan være cached i op til ét minut, før ændringerne begynder at slå igennem.
+
 ## Ruter
 
 - `/` – fotohero, søgning, årgangsfilter og skaltypefilter.

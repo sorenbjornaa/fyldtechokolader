@@ -7,12 +7,13 @@ import type { ChocolateSummary } from "@/types/chocolate";
 
 type ChocolateBrowserProps = {
   chocolates: ChocolateSummary[];
+  fixedYear?: number;
 };
 
 const filterList = new Intl.ListFormat("da", { type: "conjunction" });
 type FilterId = "search" | "year" | "shell";
 
-export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
+export function ChocolateBrowser({ chocolates, fixedYear }: ChocolateBrowserProps) {
   const gridRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const yearRef = useRef<HTMLSelectElement>(null);
@@ -177,18 +178,23 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
   }, [filtered]);
 
   return (
-    <section className="catalogue" id="chokolader" aria-labelledby="catalogue-title">
-      <div className="catalogue__heading page-shell">
-        <div>
-          <p className="eyebrow">Samlingen</p>
-          <h2 id="catalogue-title">Find en chokolade</h2>
+    <section
+      className="catalogue"
+      id="chokolader"
+      aria-labelledby={fixedYear ? undefined : "catalogue-title"}
+      aria-label={fixedYear ? `Chokolader fra ${fixedYear}` : undefined}
+    >
+      {!fixedYear && (
+        <div className="catalogue__heading page-shell">
+          <div>
+            <p className="eyebrow">Samlingen</p>
+            <h2 id="catalogue-title">Find en chokolade</h2>
+          </div>
+          <p className="catalogue__intro">Søg efter en smag, eller vælg årgang og chokoladetype.</p>
         </div>
-        <p className="catalogue__intro">
-          Søg efter en smag, eller vælg årgang og chokoladetype.
-        </p>
-      </div>
+      )}
 
-      <div className="filters page-shell" aria-label="Filtrer chokolader">
+      <div className={`filters page-shell${fixedYear ? " filters--fixed-year" : ""}`} aria-label="Filtrer chokolader">
         <div className="search-field">
           <label className="sr-only" htmlFor="chocolate-search">Søg i chokolader</label>
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -221,11 +227,12 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
         </div>
 
         <label className="select-field">
-          <span>Chokolade</span>
+          <span id="chocolate-shell-label">Chokolade</span>
           <select
             ref={shellRef}
             id="chocolate-shell"
             name="shell"
+            aria-labelledby="chocolate-shell-label"
             value={shell}
             onChange={(event) => setShell(event.target.value)}
           >
@@ -238,23 +245,26 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
           </select>
         </label>
 
-        <label className="select-field">
-          <span>Årgang</span>
-          <select
-            ref={yearRef}
-            id="chocolate-year"
-            name="year"
-            value={year}
-            onChange={(event) => setYear(event.target.value)}
-          >
-            <option value="alle">Alle år</option>
-            {years.map((value) => (
-              <option value={String(value)} key={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </label>
+        {!fixedYear && (
+          <label className="select-field">
+            <span id="chocolate-year-label">Årgang</span>
+            <select
+              ref={yearRef}
+              id="chocolate-year"
+              name="year"
+              aria-labelledby="chocolate-year-label"
+              value={year}
+              onChange={(event) => setYear(event.target.value)}
+            >
+              <option value="alle">Alle år</option>
+              {years.map((value) => (
+                <option value={String(value)} key={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
       <div className="catalogue__status page-shell" aria-live="polite">
@@ -271,6 +281,7 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
               chocolate={chocolate}
               key={chocolate.id}
               priority={index < 3}
+              showYear={!fixedYear}
             />
           ))}
         </div>
@@ -310,7 +321,7 @@ export function ChocolateBrowser({ chocolates }: ChocolateBrowserProps) {
               </button>
             </>
           ) : (
-            <p>Der er endnu ingen chokolader i samlingen.</p>
+            <p>{fixedYear ? `Der er endnu ingen chokolader fra ${fixedYear}.` : "Der er endnu ingen chokolader i samlingen."}</p>
           )}
         </div>
       )}

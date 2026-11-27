@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ChocolateBrowser } from "@/components/chocolate-browser";
 import { SiteHeader } from "@/components/site-header";
-import { getChocolates, getFrontPage } from "@/lib/api";
+import { chocolateSummaries, getChocolates, getFrontPage } from "@/lib/api";
 import { pageMetadata } from "@/lib/metadata";
 
 export async function generateMetadata() {
@@ -26,19 +26,6 @@ export default async function Home() {
   const latestDescription = latest?.description !== latest?.title
     ? latest?.description
     : undefined;
-
-  const summaries = chocolates.map((chocolate) => ({
-    id: chocolate.id,
-    slug: chocolate.slug,
-    title: chocolate.title,
-    description: chocolate.description,
-    productionYear: chocolate.productionYear,
-    productionDate: chocolate.productionDate,
-    shellType: chocolate.shellType,
-    badge: chocolate.badge,
-    image: chocolate.image,
-    rating: chocolate.rating,
-  }));
 
   return (
     <>
@@ -92,7 +79,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <ChocolateBrowser chocolates={summaries} />
+        <ChocolateBrowser chocolates={chocolateSummaries(chocolates)} />
       </main>
     </>
   );

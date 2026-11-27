@@ -6,9 +6,11 @@ import type { ChocolateSummary } from "@/types/chocolate";
 type ChocolateCardProps = {
   chocolate: ChocolateSummary;
   priority?: boolean;
+  showYear?: boolean;
 };
 
-export function ChocolateCard({ chocolate, priority = false }: ChocolateCardProps) {
+export function ChocolateCard({ chocolate, priority = false, showYear = true }: ChocolateCardProps) {
+  const meta = [chocolate.shellType?.name, showYear ? chocolate.productionYear : null].filter(Boolean).join(" · ");
   return (
     <article className="chocolate-card reveal-on-scroll">
       <Link
@@ -34,11 +36,7 @@ export function ChocolateCard({ chocolate, priority = false }: ChocolateCardProp
           ) : null}
         </div>
         <div className="chocolate-card__content">
-          <p className="eyebrow chocolate-card__meta">
-            {[chocolate.shellType?.name, chocolate.productionYear]
-              .filter(Boolean)
-              .join(" · ")}
-          </p>
+          {meta && <p className="eyebrow chocolate-card__meta">{meta}</p>}
           <h3>{chocolate.title}</h3>
           {chocolate.description && chocolate.description !== chocolate.title ? (
             <p className="chocolate-card__description">{chocolate.description}</p>

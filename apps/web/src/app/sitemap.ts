@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
-import { getChocolates, getFrontPage, getPrivacyPage } from "@/lib/api";
+import { getChocolates, getFrontPage, getPrivacyPage, getYearPages } from "@/lib/api";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [chocolates, frontPage, privacyPage] = await Promise.all([getChocolates(), getFrontPage(), getPrivacyPage()]);
+  const [chocolates, frontPage, privacyPage, yearPages] = await Promise.all([getChocolates(), getFrontPage(), getPrivacyPage(), getYearPages()]);
   const baseUrl = "https://www.fyldtechokolader.dk";
 
   return [
@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     }] : []),
     ...(privacyPage && !privacyPage.seo.noindex ? [{ url: `${baseUrl}/privatlivspolitik` }] : []),
+    ...yearPages.filter((page) => !page.seo.noindex).map((page) => ({ url: `${baseUrl}/${page.slug}` })),
     ...chocolates.filter((chocolate) => !chocolate.seo.noindex).map((chocolate) => ({
       url: `${baseUrl}/chokolade/${chocolate.slug}`,
       lastModified: new Date(chocolate.modifiedAt),

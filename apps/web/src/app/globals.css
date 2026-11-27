@@ -149,6 +149,38 @@ h3 {
   color: var(--ft-color-action-primary);
 }
 
+.site-navigation__toggle {
+  display: inline-flex;
+  min-width: var(--ft-touch-min);
+  min-height: var(--ft-touch-min);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ft-color-text-primary);
+  cursor: pointer;
+  font-size: var(--ft-font-size-meta);
+  line-height: var(--ft-line-height-meta);
+}
+
+.site-navigation__links {
+  position: absolute;
+  inset: 100% 0 auto;
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--ft-spacing-2);
+  border-bottom: 1px solid var(--ft-color-line);
+  padding: var(--ft-spacing-3) var(--ft-container-padding-inline);
+  background: var(--ft-color-surface-page);
+}
+
+.site-navigation__links[data-open="true"] {
+  display: flex;
+}
+
 .brand {
   display: inline-flex;
   flex-direction: column;
@@ -233,6 +265,44 @@ h3 {
   color: var(--ft-color-text-secondary);
   font-size: clamp(1rem, 2vw, 1.22rem);
   white-space: pre-line;
+}
+
+.hero--year {
+  min-height: clamp(420px, 55vw, 670px);
+}
+
+.hero--year .hero__image {
+  object-position: center top;
+  animation: none;
+}
+
+.hero--year .hero__content {
+  padding-bottom: var(--ft-spacing-10);
+  pointer-events: none;
+  animation-delay: 0ms;
+}
+
+.hero--year .hero__content :is(h1, p) {
+  margin-block-end: 0;
+  pointer-events: auto;
+}
+
+.hero--year h1 {
+  max-width: none;
+  font-size: clamp(
+    var(--ft-font-size-display),
+    8.9vw,
+    calc(var(--ft-font-size-display) * 2)
+  );
+  letter-spacing: -0.025em;
+}
+
+.hero--year .hero__description {
+  padding-block: var(--ft-spacing-5);
+}
+
+.hero--year + .catalogue {
+  padding-top: var(--ft-section-space);
 }
 
 .button {
@@ -542,7 +612,7 @@ h3 {
 }
 
 .catalogue {
-  padding-top: var(--ft-spacing-3);
+  padding-top: var(--ft-spacing-16);
   padding-bottom: 88px;
 }
 
@@ -1149,6 +1219,21 @@ h3 {
 }
 
 @media (min-width: 768px) {
+  .site-navigation__toggle {
+    display: none;
+  }
+
+  .site-navigation__links {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--ft-spacing-4);
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+
   .brand {
     font-size: 1.8rem;
   }
@@ -1175,6 +1260,10 @@ h3 {
   .filters {
     grid-template-columns: minmax(260px, 1fr) 200px 240px;
     gap: var(--ft-spacing-6);
+  }
+
+  .filters--fixed-year {
+    grid-template-columns: minmax(0, 1fr) 200px;
   }
 
   .chocolate-grid {
@@ -1216,6 +1305,14 @@ h3 {
 @media (min-width: 1200px) {
   .hero__content {
     padding-bottom: 128px;
+  }
+
+  .hero--year .hero__content {
+    padding-bottom: calc(var(--ft-spacing-16) + var(--ft-spacing-1) + 1px);
+  }
+
+  .hero--year .hero__media {
+    inset: -2% -7.22% 0;
   }
 
   .catalogue {

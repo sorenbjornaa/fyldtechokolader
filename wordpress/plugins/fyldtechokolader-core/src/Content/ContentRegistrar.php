@@ -10,8 +10,9 @@ namespace Fyldtechokolader\Core\Content;
 defined( 'ABSPATH' ) || exit;
 
 final class ContentRegistrar {
-	public const POST_TYPE      = 'chokolade';
-	public const SHELL_TAXONOMY = 'chokolade_skaltype';
+	public const POST_TYPE         = 'chokolade';
+	public const SHELL_TAXONOMY    = 'chokolade_skaltype';
+	public const LANDING_YEAR_META = 'ft_landing_year';
 
 	public function register(): void {
 		$this->register_post_type();
@@ -125,6 +126,73 @@ final class ContentRegistrar {
 				),
 				'position' => 'normal',
 				'active'   => true,
+			)
+		);
+	}
+
+	public function register_year_page_fields(): void {
+		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+			return;
+		}
+
+		$fields = array(
+			array(
+				'key'          => 'field_fyldtechokolader_landing_year',
+				'label'        => 'Produktionsår',
+				'name'         => self::LANDING_YEAR_META,
+				'type'         => 'number',
+				'min'          => 2000,
+				'max'          => 2100,
+				'step'         => 1,
+				'instructions' => 'Udfyld året for at vise denne side som en årgangsside på det offentlige site. Lad feltet stå tomt på almindelige sider.',
+			),
+		);
+
+		foreach ( array(
+			'eyebrow'     => array( 'Overlinje', 'text' ),
+			'heading'     => array( 'H1-overskrift', 'text' ),
+			'description' => array( 'Introduktion', 'textarea' ),
+			'image'       => array( 'Topbillede', 'image' ),
+		) as $name => list( $label, $type ) ) {
+			$field = array(
+				'key'               => 'field_fyldtechokolader_landing_' . $name,
+				'label'             => $label,
+				'name'              => 'ft_landing_' . $name,
+				'type'              => $type,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_fyldtechokolader_landing_year',
+							'operator' => '!=empty',
+						),
+					),
+				),
+			);
+			if ( 'image' === $type ) {
+				$field['return_format'] = 'id';
+			}
+			$fields[] = $field;
+		}
+
+		acf_add_local_field_group(
+			array(
+				'key'      => 'group_fyldtechokolader_year_page',
+				'title'    => 'Årgangsside',
+				'fields'   => $fields,
+				'location' => array(
+					array(
+						array(
+							'param'    => 'post_type',
+							'operator' => '==',
+							'value'    => 'page',
+						),
+						array(
+							'param'    => 'page_type',
+							'operator' => '!=',
+							'value'    => 'front_page',
+						),
+					),
+				),
 			)
 		);
 	}
