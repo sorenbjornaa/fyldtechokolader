@@ -29,10 +29,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body>
-        {children}
         {cookieBotEnabled && (
-          <Script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid={cookieBotId} strategy="beforeInteractive" />
+          <Script
+            id="Cookiebot"
+            src="https://consent.cookiebot.com/uc.js"
+            data-cbid={cookieBotId}
+            data-blockingmode="auto"
+            strategy="beforeInteractive"
+          />
         )}
+        {children}
         <SiteFooter cookieSettings={cookieBotEnabled} measurementId={/^G-[A-Z0-9]+$/.test(measurementId ?? "") ? measurementId : undefined} />
       </body>
     </html>
