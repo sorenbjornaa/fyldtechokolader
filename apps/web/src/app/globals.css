@@ -1012,6 +1012,34 @@ h3 {
   font-size: 0.8rem;
 }
 
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ft-spacing-4);
+  font-size: var(--ft-font-size-meta);
+}
+
+.site-footer__links a,
+.site-footer__cookies {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ft-touch-min);
+  color: var(--ft-color-text-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.privacy-page {
+  padding-block: var(--ft-section-space);
+}
+
+.privacy-page h1 {
+  margin-bottom: var(--ft-spacing-6);
+  font-size: var(--ft-font-size-h1);
+  line-height: var(--ft-line-height-h1);
+}
+
 .message-page {
   display: flex;
   min-height: calc(100svh - var(--ft-header-height));

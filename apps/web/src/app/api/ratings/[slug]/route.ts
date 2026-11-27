@@ -19,6 +19,10 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
 ) {
+  if (process.env.VERCEL_ENV === "preview" || process.env.VERCEL_ENV === "development") {
+    return errorResponse("Bedømmelser gemmes kun på det offentlige site.", 403);
+  }
+
   const origin = request.headers.get("origin");
   if (!origin || origin !== request.nextUrl.origin) {
     return errorResponse("Requesten kunne ikke godkendes.", 403);

@@ -1,5 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
-import type { Chocolate } from "@/types/chocolate";
+import type { Chocolate, PageSeo } from "@/types/chocolate";
 
 const defaultApiUrl =
   "https://cms.fyldtechokolader.dk/wp-json/fyldtechokolader/v1";
@@ -51,12 +51,22 @@ type FrontPageCopy = {
 };
 
 type FrontPage = {
+  seo?: PageSeo;
   hero: FrontPageCopy & {
     buttonLabel: string;
     image: { src: string; alt: string } | null;
   };
   introduction: FrontPageCopy;
 };
+
+type PrivacyPage = { title: string; contentHtml: string; seo: PageSeo };
+
+export async function getPrivacyPage(): Promise<PrivacyPage | null> {
+  "use cache";
+  cacheLife("minutes");
+
+  return fetchApi<PrivacyPage | null>("/privatlivspolitik", null);
+}
 
 export async function getFrontPage(): Promise<FrontPage | null> {
   "use cache";

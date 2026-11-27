@@ -15,6 +15,18 @@ npm run dev
 
 Miljøvariablen `WORDPRESS_API_URL` er server-side og må ikke have `NEXT_PUBLIC_`-prefix.
 
+## Cookiebot og Google Analytics
+
+Sæt `COOKIEBOT_DOMAIN_GROUP_ID` til den eksisterende domænegruppes CBID og `GA_MEASUREMENT_ID` til `G-C563M1LSHN` i Vercels **Production**-miljø, når privatlivssiden og gruppens domæner er gennemgået. Preview indlæser hverken Cookiebot eller GA4. Lokalt kan variablerne angives ved opstart til test med simulerede kald. Google-tagget indlæses ved Cookiebots samtykke til statistik.
+
+Efter udrulning kontrolleres afvisning, accept og tilbagekaldelse i en ny browsersession. Kontrollér derefter en testsidevisning i GA4 Realtime på det ønskede webdatastrøm-id, også ved navigation mellem forsiden og en chokolade.
+
+## Staging og privatlivspolitik
+
+Push til `staging` opretter en Vercel Preview. Åbn den under projektets **Deployments**. Preview kan læse publiceret CMS-indhold, mens rating-API'et afviser skrivning, og `robots.txt` afviser crawl.
+
+`/privatlivspolitik` viser den publicerede side valgt under **Indstillinger → Privatliv** i WordPress via Core-pluginets `/privatlivspolitik`-endpoint fra version 0.1.6. Forsiden, privatlivspolitikken og chokoladesiderne bruger samme SEO-kontrakt med metadata fra Yoast. CMS'ets globale noindex holdes adskilt fra de offentlige siders indeksvalg.
+
 ## Kontrol
 
 ```bash

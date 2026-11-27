@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const cookieBotId = process.env.COOKIEBOT_DOMAIN_GROUP_ID;
+  const measurementId = process.env.GA_MEASUREMENT_ID;
+  const cookieBotEnabled = !["preview", "development"].includes(process.env.VERCEL_ENV ?? "") &&
+    /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(cookieBotId ?? "");
   return (
     <html lang="da">
       <head>
@@ -24,8 +29,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body>
+        {cookieBotEnabled && (
+          <Script
+            id="Cookiebot"
+            src="https://consent.cookiebot.com/uc.js"
+            data-cbid={cookieBotId}
+            data-blockingmode="auto"
+            strategy="beforeInteractive"
+          />
+        )}
         {children}
-        <SiteFooter />
+        <SiteFooter cookieSettings={cookieBotEnabled} measurementId={/^G-[A-Z0-9]+$/.test(measurementId ?? "") ? measurementId : undefined} />
       </body>
     </html>
   );

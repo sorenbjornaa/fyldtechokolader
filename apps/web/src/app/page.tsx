@@ -2,6 +2,16 @@ import Image from "next/image";
 import { ChocolateBrowser } from "@/components/chocolate-browser";
 import { SiteHeader } from "@/components/site-header";
 import { getChocolates, getFrontPage } from "@/lib/api";
+import { pageMetadata } from "@/lib/metadata";
+
+export async function generateMetadata() {
+  const page = await getFrontPage();
+  return pageMetadata("/", {
+    title: "Fyldte chokolader",
+    description: page?.hero.description || "Håndlavede fyldte chokolader, smagskombinationer, opskrifter og vurderinger.",
+    image: page?.hero.image?.src,
+  }, page?.seo);
+}
 
 export default async function Home() {
   const [chocolates, frontPage] = await Promise.all([
