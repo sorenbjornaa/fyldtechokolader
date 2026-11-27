@@ -257,17 +257,9 @@ final class ChocolateRepository {
 	}
 
 	/**
-	 * @return array{title: string, description: string, image: string|null}
+	 * @return array{title: string, description: string, image: string|null, canonical: string, noindex: bool, nofollow: bool, source: string}
 	 */
 	private function seo( WP_Post $post, ?string $fallback_image ): array {
-		$title       = (string) get_post_meta( $post->ID, '_yoast_wpseo_title', true );
-		$description = (string) get_post_meta( $post->ID, '_yoast_wpseo_metadesc', true );
-		$image       = (string) get_post_meta( $post->ID, '_yoast_wpseo_opengraph-image', true );
-
-		return array(
-			'title'       => TextNormalizer::plain( '' !== $title ? $title : get_the_title( $post ) ),
-			'description' => TextNormalizer::plain( '' !== $description ? $description : $post->post_excerpt ),
-			'image'       => '' !== $image ? $image : $fallback_image,
-		);
+		return SeoMetadata::for_post( $post, $fallback_image );
 	}
 }

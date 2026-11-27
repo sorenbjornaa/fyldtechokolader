@@ -7,6 +7,7 @@ import { ChocolateCard } from "@/components/chocolate-card";
 import { RatingForm } from "@/components/rating-form";
 import { SiteHeader } from "@/components/site-header";
 import { getChocolate, getChocolates } from "@/lib/api";
+import { pageMetadata } from "@/lib/metadata";
 
 type ChocolatePageProps = {
   params: Promise<{ slug: string }>;
@@ -27,19 +28,13 @@ export async function generateMetadata({
     return { title: "Chokoladen blev ikke fundet" };
   }
 
-  return {
-    title: chocolate.seo.title || chocolate.title,
-    description:
-      chocolate.seo.description ||
-      chocolate.description ||
-      `${chocolate.title} – en fyldt chokolade fra ${chocolate.productionYear ?? "samlingen"}.`,
-    openGraph: {
-      title: chocolate.seo.title || chocolate.title,
-      description: chocolate.seo.description || chocolate.description,
-      type: "article",
-      images: chocolate.seo.image ? [chocolate.seo.image] : [],
-    },
-  };
+  return pageMetadata(`/chokolade/${chocolate.slug}`, {
+    title: chocolate.title,
+    description: chocolate.description !== chocolate.title && chocolate.description
+      ? chocolate.description
+      : `${chocolate.title} – en fyldt chokolade fra ${chocolate.productionYear ?? "samlingen"}.`,
+    image: chocolate.image?.src,
+  }, chocolate.seo, "article");
 }
 
 function formatDate(date: string | null): string | null {

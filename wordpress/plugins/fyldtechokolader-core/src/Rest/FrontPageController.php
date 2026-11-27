@@ -8,6 +8,7 @@
 namespace Fyldtechokolader\Core\Rest;
 
 use Fyldtechokolader\Core\Content\TextNormalizer;
+use Fyldtechokolader\Core\Content\SeoMetadata;
 use WP_Error;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -25,6 +26,15 @@ final class FrontPageController {
 				'permission_callback' => '__return_true',
 			)
 		);
+		register_rest_route(
+			ChocolateController::NAMESPACE,
+			'/privatlivspolitik',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'privacy' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	public function show(): WP_REST_Response|WP_Error {
@@ -39,6 +49,7 @@ final class FrontPageController {
 
 		return new WP_REST_Response(
 			array(
+				'seo'          => SeoMetadata::for_post( $page, $image ? $image : null ),
 				'hero'         => array(
 					'eyebrow'     => $text( 'hero_eyebrow' ),
 					'heading'     => $text( 'hero_heading' ),
@@ -54,6 +65,22 @@ final class FrontPageController {
 					'heading'     => $text( 'introduction_heading' ),
 					'description' => $text( 'introduction_description' ),
 				),
+			)
+		);
+	}
+
+	public function privacy(): WP_REST_Response|WP_Error {
+		$page_id = (int) get_option( 'wp_page_for_privacy_policy' );
+		$page    = $page_id > 0 ? get_post( $page_id ) : null;
+		if ( ! $page || 'page' !== $page->post_type || 'publish' !== $page->post_status || '' !== $page->post_password ) {
+			return new WP_Error( 'ft_privacy_page_not_found', 'Ingen offentlig privatlivsside fundet.', array( 'status' => 404 ) );
+		}
+
+		return new WP_REST_Response(
+			array(
+				'title'       => TextNormalizer::plain( get_the_title( $page ) ),
+				'contentHtml' => wp_kses_post( do_blocks( $page->post_content ) ),
+				'seo'         => SeoMetadata::for_post( $page ),
 			)
 		);
 	}

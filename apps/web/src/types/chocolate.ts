@@ -16,6 +16,16 @@ export type ChocolateRating = {
   count: number;
 };
 
+export type PageSeo = {
+  title: string;
+  description: string;
+  image: string | null;
+  canonical?: string;
+  noindex?: boolean;
+  nofollow?: boolean;
+  source?: "yoast" | "wordpress";
+};
+
 export type Chocolate = {
   id: number;
   slug: string;
@@ -28,11 +38,7 @@ export type Chocolate = {
   recipeHtml: string;
   image: ChocolateImage | null;
   rating: ChocolateRating;
-  seo: {
-    title: string;
-    description: string;
-    image: string | null;
-  };
+  seo: PageSeo;
   modifiedAt: string;
 };
 
